@@ -409,6 +409,22 @@ def e(text: str) -> str:
     return html.escape(text or "")
 
 
+def render_ingredient(item: str) -> str:
+    match = re.match(
+        r"^(.*?)\s+(\([^)]*готовили в (?:(\d+)\s+д(?:ень|не)|д(?:ень|не)\s+(\d+))\))(\s+—.*)$",
+        item,
+        flags=re.IGNORECASE,
+    )
+    if not match:
+        return e(item)
+    label, reference, day_before, day_after, suffix = match.groups()
+    day = int(day_before or day_after)
+    return (
+        f'<a class="prep-link" href="#d{day}-dinner">{e(label)}</a> '
+        f'{e(reference)}{e(suffix)}'
+    )
+
+
 def render_recipe(day_num: int, recipe: dict) -> str:
     rid = f"d{day_num}-{recipe['slug']}"
     leftover_pill = (
@@ -421,7 +437,7 @@ def render_recipe(day_num: int, recipe: dict) -> str:
     for sec in recipe["sections"]:
         if sec["name"] and sec["name"] != "Ингредиенты":
             ings.append(f'<p class="ing-sub">{e(sec["name"])}</p>')
-        ings.append("<ul>" + "".join(f"<li>{e(it)}</li>" for it in sec["items"]) + "</ul>")
+        ings.append("<ul>" + "".join(f"<li>{render_ingredient(it)}</li>" for it in sec["items"]) + "</ul>")
     steps = "<ol>" + "".join(f"<li>{e(s)}</li>" for s in recipe["steps"]) + "</ol>"
     leftover = ""
     if recipe["leftover"]:
@@ -806,6 +822,14 @@ a { color: inherit; }
   font-size: 0.68rem; line-height: 1.32;
 }
 .recipe-body li + li { margin-top: 0.12rem; }
+.recipe-body .prep-link {
+  color: var(--terra-deep);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 0.16em;
+}
+.recipe-body .prep-link:hover { color: var(--ink); text-decoration-style: solid; }
 .ing-sub { font-size: 0.64rem; font-weight: 600; margin: 0.35rem 0 0.2rem; color: var(--ink); }
 .note {
   grid-column: 1 / -1;
