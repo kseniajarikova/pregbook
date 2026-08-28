@@ -713,6 +713,14 @@ a { color: inherit; }
   background: transparent; cursor: pointer;
 }
 .toc-wrap { overflow-x: auto; margin-bottom: 1.3rem; background: #fff; }
+.toc-toggle {
+  display: none;
+  align-items: center; justify-content: center;
+  font: inherit; font-size: 0.68rem; font-weight: 600;
+  padding: 0.35rem 0.7rem;
+  border: 1.5px solid var(--line); border-radius: var(--radius-pill);
+  background: transparent; color: var(--ink); cursor: pointer;
+}
 .toc-table { width: 100%; border-collapse: collapse; min-width: 720px; }
 .toc-table th, .toc-table td {
   text-align: left; vertical-align: top;
@@ -812,6 +820,21 @@ a { color: inherit; }
   background: var(--cream); border: 1px solid var(--line);
   font-size: 0.78rem; color: var(--ink-soft); text-align: center;
 }
+.back-to-top {
+  position: fixed; left: 1rem; bottom: 1rem; z-index: 60;
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  padding: 0.5rem 0.7rem;
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  border-radius: var(--radius-pill);
+  background: var(--terra); color: var(--cream);
+  box-shadow: 0 8px 22px rgba(43, 35, 29, 0.18);
+  font: inherit; font-size: 0.7rem; font-weight: 700;
+  text-decoration: none;
+  opacity: 0; pointer-events: none;
+  transform: translateY(0.5rem);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.back-to-top.is-visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
 @media (max-width: 980px) {
   .recipes-grid, .shop-grid { grid-template-columns: 1fr 1fr; }
   .how { grid-template-columns: 1fr; }
@@ -822,10 +845,53 @@ a { color: inherit; }
   .search input { width: 100%; }
 }
 @media (max-width: 560px) {
-  .intro { grid-template-columns: 84px 1fr; }
-  .intro-photo { grid-row: span 2; aspect-ratio: 1 / 1; }
+  body { overflow-x: hidden; }
+  .intro { grid-template-columns: 72px minmax(0, 1fr); }
+  .intro-photo { grid-row: span 2; min-height: 72px; aspect-ratio: 1 / 1; }
+  .intro-mid, .intro-side { min-width: 0; padding: 0.65rem 0.75rem; }
+  .intro-mid h1 { font-size: 1.08rem; overflow-wrap: anywhere; }
+  .intro-side .lead { font-size: 0.75rem; }
+  .week-banner { align-items: flex-start; }
+  .week-chips { width: 100%; }
   .recipes-grid, .shop-grid { grid-template-columns: 1fr; }
-  .toc-table { min-width: 560px; }
+  .week-toc .block-head {
+    display: grid; grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end; gap: 0.35rem 0.6rem;
+  }
+  .week-toc .block-head p { grid-column: 1 / -1; }
+  .toc-toggle { display: inline-flex; grid-column: 2; grid-row: 1; }
+  .week-toc .toc-wrap { display: none; overflow: visible; margin-top: 0.75rem; }
+  .week-toc.is-open .toc-wrap { display: block; }
+  .toc-table { min-width: 0; display: block; }
+  .toc-table thead { display: none; }
+  .toc-table tbody, .toc-table tr { display: block; }
+  .toc-table tr {
+    padding: 0.55rem 0.7rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .toc-table tbody th, .toc-table tbody td {
+    display: block; width: auto; padding: 0.3rem 0;
+    border: 0; font-size: 0.76rem;
+  }
+  .toc-table tbody th { padding-bottom: 0.45rem; background: transparent; }
+  .toc-table tbody td::before {
+    display: block; margin-bottom: 0.1rem;
+    font-size: 0.6rem; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--ink-mute);
+  }
+  .toc-table tbody td:nth-child(2)::before { content: "завтрак"; }
+  .toc-table tbody td:nth-child(3)::before { content: "обед"; }
+  .toc-table tbody td:nth-child(4)::before { content: "ужин"; }
+  .toc-table td a { display: block; line-height: 1.35; overflow-wrap: anywhere; }
+  .recipe { min-width: 0; }
+  .recipe-hero { grid-template-columns: 76px minmax(0, 1fr); min-height: 76px; }
+  .recipe-photo { width: 76px; height: 76px; }
+  .recipe-head { min-width: 0; padding: 0.55rem 0.65rem; overflow: hidden; }
+  .recipe-head h3 { font-size: 0.8rem; line-height: 1.2; overflow-wrap: anywhere; }
+  .recipe-body { min-width: 0; }
+  .recipe-body ul, .recipe-body ol { font-size: 0.72rem; line-height: 1.4; overflow-wrap: anywhere; }
+  .note { font-size: 0.68rem; }
+  .back-to-top { left: max(0.75rem, env(safe-area-inset-left)); bottom: max(0.75rem, env(safe-area-inset-bottom)); }
 }
 @media print {
   .weeks-nav, .search, .how, .ghost-btn, .day-head .back { display: none !important; }
@@ -849,6 +915,34 @@ document.querySelectorAll('[data-reset]').forEach(btn => {
     });
   });
 });
+document.querySelectorAll('.week-toc').forEach(toc => {
+  const wrap = toc.querySelector('.toc-wrap');
+  const head = toc.querySelector('.block-head');
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'toc-toggle';
+  button.setAttribute('aria-expanded', 'false');
+  button.setAttribute('aria-controls', wrap.id || 'week-menu');
+  button.textContent = 'показать меню';
+  head.append(button);
+  button.addEventListener('click', () => {
+    const open = toc.classList.toggle('is-open');
+    button.setAttribute('aria-expanded', String(open));
+    button.textContent = open ? 'скрыть меню' : 'показать меню';
+  });
+});
+document.querySelectorAll('.week-chips a[href$="-toc"]').forEach(link => {
+  link.addEventListener('click', () => {
+    const toc = document.querySelector(link.getAttribute('href'));
+    if (!toc) return;
+    toc.classList.add('is-open');
+    const button = toc.querySelector('.toc-toggle');
+    if (button) {
+      button.setAttribute('aria-expanded', 'true');
+      button.textContent = 'скрыть меню';
+    }
+  });
+});
 const search = document.getElementById('q');
 search.addEventListener('input', () => {
   const q = search.value.trim().toLowerCase();
@@ -868,6 +962,10 @@ const io = new IntersectionObserver(entries => {
   weekLinks.forEach(a => a.classList.toggle('is-active', a.getAttribute('href') === '#' + vis.target.id));
 }, { rootMargin: '-20% 0px -65% 0px', threshold: [0, 0.1, 0.3] });
 weeks.forEach(w => io.observe(w));
+const topButton = document.querySelector('.back-to-top');
+const updateTopButton = () => topButton.classList.toggle('is-visible', window.scrollY > 450);
+window.addEventListener('scroll', updateTopButton, { passive: true });
+updateTopButton();
 """
 
 
@@ -888,7 +986,7 @@ def build_html(weeks: list[dict]) -> str:
   <style>{CSS}</style>
 </head>
 <body>
-  <header class="intro">
+  <header class="intro" id="top">
     <div class="intro-photo" aria-hidden="true">
       <div class="badge-arc"><span>#sekta</span></div>
     </div>
@@ -927,6 +1025,7 @@ def build_html(weeks: list[dict]) -> str:
     <p class="reminder"><strong>Напоминание:</strong> при беременности яйца, рыбу и птицу всегда готовить полностью. Хлеб рекомендуем ржаной или цельнозерновой.</p>
     {body}
     <p class="footer-note">35 дней · 105 рецептов · 5 списков покупок. Обеды с пометкой «из заготовки» — разогрев вчерашнего ужина.</p>
+    <a class="back-to-top" href="#top" aria-label="Вернуться наверх">↑ наверх</a>
   </main>
   <script>{JS}</script>
 </body>
