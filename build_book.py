@@ -426,7 +426,7 @@ def render_recipe(day_num: int, recipe: dict) -> str:
     leftover = ""
     if recipe["leftover"]:
         leftover = (
-            '<p class="note leftover-note"><strong>На завтра:</strong> '
+            '<p class="note leftover-note"><strong>↪ На завтра:</strong> '
             + e(" · ".join(recipe["leftover"]))
             + "</p>"
         )
@@ -496,7 +496,7 @@ def render_week(week: dict) -> str:
                 f'<li><label><input type="checkbox" id="{cid}" /> <span>{e(item)}</span></label></li>'
             )
         shop_cols.append(
-            f'<section class="shop-cat"><h4>{e(cat["name"])}</h4><ul>{"".join(items)}</ul></section>'
+            f'<details class="shop-cat"><summary>{e(cat["name"])}</summary><ul>{"".join(items)}</ul></details>'
         )
 
     days_html = []
@@ -736,10 +736,14 @@ a { color: inherit; }
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.9rem 1.1rem;
 }
-.shop-cat h4 {
+.shop-cat > summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;
   font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase;
   color: var(--terra-deep); margin-bottom: 0.4rem;
 }
+.shop-cat > summary::-webkit-details-marker { display: none; }
+.shop-cat > summary::after { content: "+"; font-size: 1rem; font-weight: 500; color: var(--terra-deep); }
+.shop-cat[open] > summary::after { content: "−"; }
+.shop-cat[open] { padding-bottom: 0.35rem; }
 .shop-cat ul { list-style: none; }
 .shop-cat li { font-size: 0.74rem; color: var(--ink-soft); line-height: 1.35; margin-bottom: 0.28rem; }
 .shop-cat label { display: flex; gap: 0.4rem; align-items: flex-start; cursor: pointer; }
@@ -753,10 +757,10 @@ a { color: inherit; }
 .day-head .eyebrow { font-size: 0.64rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-mute); }
 .day-head h3 { font-size: 1.15rem; font-weight: 800; letter-spacing: -0.03em; text-transform: lowercase; }
 .day-head .back { margin-left: auto; font-size: 0.68rem; color: var(--terra-deep); text-decoration: none; }
-.recipes-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; }
+.recipes-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.75rem; align-items: start; }
 .recipe {
   background: #fff; border-radius: 10px; overflow: hidden;
-  display: flex; flex-direction: column; height: 100%;
+  display: flex; flex-direction: column; height: auto;
   box-shadow: 0 12px 28px rgba(43, 35, 29, 0.05);
 }
 .recipe.hidden { display: none; }
@@ -784,7 +788,7 @@ a { color: inherit; }
   font-size: 0.6rem; font-weight: 500; color: var(--cream); width: fit-content;
 }
 .pill.leftover { border-color: var(--blue); background: rgba(194, 214, 227, 0.22); }
-.recipe-body { padding: 0.65rem 0.75rem 0.8rem; display: grid; gap: 0.55rem; flex: 1; }
+.recipe-body { padding: 0.65rem 0.75rem 0.8rem; display: grid; gap: 0.55rem; }
 .recipe-body h4 {
   font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em;
   text-transform: uppercase; color: var(--ink-mute); margin-bottom: 0.35rem;
@@ -802,7 +806,7 @@ a { color: inherit; }
   border-left: 3px solid var(--blue);
   font-size: 0.64rem; line-height: 1.4;
 }
-.leftover-note { background: rgba(198, 102, 69, 0.1); border-left-color: var(--terra); }
+.leftover-note { background: rgba(217, 154, 155, 0.18); border-left-color: var(--terra); }
 .footer-note {
   margin-top: 1.5rem; padding: 1rem 1.2rem;
   background: var(--cream); border: 1px solid var(--line);
