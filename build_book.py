@@ -48,6 +48,10 @@ MEAL_RE = re.compile(r"^(Завтрак|Обед|Ужин)(?:\s*[—–-]\s*(.*)
 SHOP_RE = re.compile(r"^СПИСОК ПОКУПОК")
 
 IMAGE_RULES = [
+    (r"боул с киноа, авокадо", "dish-quinoa.jpg"),
+    (r"киноа-каша", "dish-oatmeal.jpg"),
+    (r"овсяноблин|блинчик", "dish-syrniki.jpg"),
+    (r"куриный суп", "dish-chicken.jpg"),
     (r"сырник", "dish-syrniki.jpg"),
     (r"шакшук", "dish-shakshuka.jpg"),
     (r"омлет|яичниц", "dish-omelette.jpg"),
@@ -558,8 +562,8 @@ def render_week(week: dict) -> str:
 
 CSS = r"""
 :root {
-  --terra: #c66645;
-  --terra-deep: #b55a3c;
+  --terra: #d99a9b;
+  --terra-deep: #b97880;
   --cream: #f2ede4;
   --cream-soft: #f7f3ec;
   --blue: #c2d6e3;
