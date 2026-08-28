@@ -9,8 +9,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
 :root {
-  --terra: #c66645;
-  --terra-deep: #b55a3c;
+  --terra: #d99a9b;
+  --terra-deep: #b97880;
   --cream: #f2ede4;
   --cream-soft: #f7f3ec;
   --blue: #c2d6e3;
@@ -97,7 +97,7 @@ a { color: inherit; }
 }
 .weeks-nav a.is-active, .weeks-nav a:hover {
   border-color: var(--terra);
-  background: rgba(198, 102, 69, 0.1);
+  background: rgba(217, 154, 155, 0.18);
 }
 .search { margin-left: auto; }
 .search input {
@@ -242,14 +242,14 @@ a { color: inherit; }
 }
 .recipe-body li + li { margin-top: 0.12rem; }
 .ing-sub { font-size: 0.64rem; font-weight: 600; margin: 0.35rem 0 0.2rem; color: var(--ink); }
-.note {
+.swap-note { margin-top: 0.1rem; padding: 0.55rem 0.65rem; border-left: 3px solid var(--terra); background: rgba(217, 154, 155, 0.14); color: var(--ink-soft); font-size: 0.67rem; line-height: 1.4; }\n.swap-note strong { color: var(--ink); }\n.note {
   grid-column: 1 / -1;
   margin-top: 0.15rem; padding: 0.5rem 0.65rem;
   background: rgba(194, 214, 227, 0.35);
   border-left: 3px solid var(--blue);
   font-size: 0.64rem; line-height: 1.4;
 }
-.leftover-note { background: rgba(198, 102, 69, 0.1); border-left-color: var(--terra); }
+.leftover-note { background: rgba(217, 154, 155, 0.18); border-left-color: var(--terra); }
 .footer-note {
   margin-top: 1.5rem; padding: 1rem 1.2rem;
   background: var(--cream); border: 1px solid var(--line);
@@ -360,7 +360,7 @@ a { color: inherit; }
             </tr><tr>
               <th><a href="#d5"><span class="dow">пт</span>
               <span class="dnum">день 5</span></a></th>
-              <td><a href="#d5-breakfast">Творог с грушей и тыквенными семечками</a></td><td><a href="#d5-lunch">Говядина с томатами и картофелем, салат из огурца</a></td><td><a href="#d5-dinner">Тёплый салат со свёклой, гаудой, апельсином и грецкими орехами</a></td>
+              <td><a href="#d5-breakfast">Творог с грушей и тыквенными семечками</a></td><td><a href="#d5-lunch">Говядина с томатами и картофелем, салат из огурца</a></td><td><a href="#d5-dinner">Тёплый салат со свёклой, моцареллой, апельсином и грецкими орехами</a></td>
             </tr><tr>
               <th><a href="#d6"><span class="dow">сб</span>
               <span class="dnum">день 6</span></a></th>
@@ -381,7 +381,7 @@ a { color: inherit; }
           <p>На неделю вперёд. Отмечайте купленное — галочки сохраняются в браузере.</p>
           <button type="button" class="ghost-btn" data-reset="week-1-shop">сбросить отметки</button>
         </div>
-        <div class="shop-grid"><section class="shop-cat"><h4>Мясо и рыба</h4><ul><li><label><input type="checkbox" id="w1-c0-i0" /> <span>филе лосося — 360 г</span></label></li><li><label><input type="checkbox" id="w1-c0-i1" /> <span>говядина (лопатка / для тушения и запекания) — 750 г</span></label></li><li><label><input type="checkbox" id="w1-c0-i2" /> <span>филе трески — 300 г</span></label></li></ul></section><section class="shop-cat"><h4>Яйца и молочные продукты</h4><ul><li><label><input type="checkbox" id="w1-c1-i0" /> <span>яйца — 9 шт</span></label></li><li><label><input type="checkbox" id="w1-c1-i1" /> <span>натуральный густой йогурт — 250 г</span></label></li><li><label><input type="checkbox" id="w1-c1-i2" /> <span>творог 5–9% — 200 г</span></label></li><li><label><input type="checkbox" id="w1-c1-i3" /> <span>молоко — 250 мл</span></label></li><li><label><input type="checkbox" id="w1-c1-i4" /> <span>сливочное масло — 15 г</span></label></li><li><label><input type="checkbox" id="w1-c1-i5" /> <span>гауда — 200 г</span></label></li><li><label><input type="checkbox" id="w1-c1-i6" /> <span>пармезан — 100 г</span></label></li></ul></section><section class="shop-cat"><h4>Крупы, злаки и хлеб</h4><ul><li><label><input type="checkbox" id="w1-c2-i0" /> <span>киноа — 60 г</span></label></li><li><label><input type="checkbox" id="w1-c2-i1" /> <span>овсяные хлопья долгой варки — 60 г</span></label></li><li><label><input type="checkbox" id="w1-c2-i2" /> <span>рис жасмин или басмати — 60 г</span></label></li><li><label><input type="checkbox" id="w1-c2-i3" /> <span>паста цельнозерновая — 160 г</span></label></li><li><label><input type="checkbox" id="w1-c2-i4" /> <span>гранола без сахара — 40 г</span></label></li><li><label><input type="checkbox" id="w1-c2-i5" /> <span>цельнозерновой хлеб — 1 буханка</span></label></li></ul></section><section class="shop-cat"><h4>Овощи</h4><ul><li><label><input type="checkbox" id="w1-c3-i0" /> <span>брокколи — 200 г</span></label></li><li><label><input type="checkbox" id="w1-c3-i1" /> <span>томаты черри — 600 г</span></label></li><li><label><input type="checkbox" id="w1-c3-i2" /> <span>томат обычный — 1 шт. (или черри к завтраку дня 1)</span></label></li><li><label><input type="checkbox" id="w1-c3-i3" /> <span>болгарский перец красный — 1 шт</span></label></li><li><label><input type="checkbox" id="w1-c3-i4" /> <span>морковь — 2 шт</span></label></li><li><label><input type="checkbox" id="w1-c3-i5" /> <span>картофель — 900 г</span></label></li><li><label><input type="checkbox" id="w1-c3-i6" /> <span>свёкла — 400 г (3 средних)</span></label></li><li><label><input type="checkbox" id="w1-c3-i7" /> <span>капуста белокочанная — 150 г</span></label></li><li><label><input type="checkbox" id="w1-c3-i8" /> <span>шпинат свежий — 160 г</span></label></li><li><label><input type="checkbox" id="w1-c3-i9" /> <span>рукола — 250 г</span></label></li><li><label><input type="checkbox" id="w1-c3-i10" /> <span>огурец — 4 шт</span></label></li><li><label><input type="checkbox" id="w1-c3-i11" /> <span>авокадо — 2 шт</span></label></li><li><label><input type="checkbox" id="w1-c3-i12" /> <span>репчатый лук — 1 шт</span></label></li><li><label><input type="checkbox" id="w1-c3-i13" /> <span>красный лук — 3 шт</span></label></li><li><label><input type="checkbox" id="w1-c3-i14" /> <span>чеснок — 2 головки</span></label></li></ul></section><section class="shop-cat"><h4>Фрукты и ягоды</h4><ul><li><label><input type="checkbox" id="w1-c4-i0" /> <span>лимон — 4 шт</span></label></li><li><label><input type="checkbox" id="w1-c4-i1" /> <span>апельсин — 2 шт</span></label></li><li><label><input type="checkbox" id="w1-c4-i2" /> <span>яблоко — 1 шт</span></label></li><li><label><input type="checkbox" id="w1-c4-i3" /> <span>груша — 1 шт</span></label></li><li><label><input type="checkbox" id="w1-c4-i4" /> <span>ягоды (черника, малина или клубника) — 80 г</span></label></li></ul></section><section class="shop-cat"><h4>Бобовые и консервы</h4><ul><li><label><input type="checkbox" id="w1-c5-i0" /> <span>чечевица зелёная или коричневая — 120 г</span></label></li><li><label><input type="checkbox" id="w1-c5-i1" /> <span>томаты консервированные в собственном соку — 1 банка 400 г</span></label></li><li><label><input type="checkbox" id="w1-c5-i2" /> <span>оливки без косточек — 120 г</span></label></li><li><label><input type="checkbox" id="w1-c5-i3" /> <span>каперсы — 2 ст. л. (1 баночка)</span></label></li></ul></section><section class="shop-cat"><h4>Масла, соусы и специи</h4><ul><li><label><input type="checkbox" id="w1-c6-i0" /> <span>оливковое масло — 250 мл</span></label></li><li><label><input type="checkbox" id="w1-c6-i1" /> <span>мисо-паста светлая — 1 ст. л</span></label></li><li><label><input type="checkbox" id="w1-c6-i2" /> <span>соевый соус — 2 ст. л</span></label></li><li><label><input type="checkbox" id="w1-c6-i3" /> <span>рисовый уксус — 1 ч. л</span></label></li><li><label><input type="checkbox" id="w1-c6-i4" /> <span>яблочный уксус — 2 ст. л</span></label></li><li><label><input type="checkbox" id="w1-c6-i5" /> <span>бальзамический уксус — 1 ч. л</span></label></li><li><label><input type="checkbox" id="w1-c6-i6" /> <span>томатная паста — 1 ст. л</span></label></li><li><label><input type="checkbox" id="w1-c6-i7" /> <span>кленовый сироп — 1 ч. л. (по желанию)</span></label></li><li><label><input type="checkbox" id="w1-c6-i8" /> <span>сахар — 1 ч. л</span></label></li><li><label><input type="checkbox" id="w1-c6-i9" /> <span>говяжий бульон — 400 мл</span></label></li><li><label><input type="checkbox" id="w1-c6-i10" /> <span>соль морская — по вкусу</span></label></li><li><label><input type="checkbox" id="w1-c6-i11" /> <span>перец чёрный молотый — по вкусу</span></label></li><li><label><input type="checkbox" id="w1-c6-i12" /> <span>зира молотая — ½ ч. л</span></label></li><li><label><input type="checkbox" id="w1-c6-i13" /> <span>паприка молотая — ½ ч. л</span></label></li><li><label><input type="checkbox" id="w1-c6-i14" /> <span>корица — ½ ч. л</span></label></li><li><label><input type="checkbox" id="w1-c6-i15" /> <span>орегано сушёный — 1 ч. л. (или свежий тимьян)</span></label></li><li><label><input type="checkbox" id="w1-c6-i16" /> <span>чили-хлопья — по желанию</span></label></li></ul></section><section class="shop-cat"><h4>Орехи и семечки</h4><ul><li><label><input type="checkbox" id="w1-c7-i0" /> <span>грецкие орехи и/или миндаль — 50 г</span></label></li><li><label><input type="checkbox" id="w1-c7-i1" /> <span>тыквенные семечки — 40 г</span></label></li><li><label><input type="checkbox" id="w1-c7-i2" /> <span>кунжут — 2 ч. л</span></label></li></ul></section><section class="shop-cat"><h4>Свежая зелень</h4><ul><li><label><input type="checkbox" id="w1-c8-i0" /> <span>петрушка — 1 пучок</span></label></li><li><label><input type="checkbox" id="w1-c8-i1" /> <span>укроп — небольшая горсть</span></label></li><li><label><input type="checkbox" id="w1-c8-i2" /> <span>кинза — небольшая горсть (по желанию, для шакшуки)</span></label></li><li><label><input type="checkbox" id="w1-c8-i3" /> <span>зелёный лук — 1 пучок</span></label></li><li><label><input type="checkbox" id="w1-c8-i4" /> <span>тимьян свежий — 1 пучок (около 8–10 веточек)</span></label></li><li><label><input type="checkbox" id="w1-c8-i5" /> <span>розмарин свежий — 2 веточки</span></label></li></ul></section></div>
+        <div class="shop-grid"><section class="shop-cat"><h4>Мясо и рыба</h4><ul><li><label><input type="checkbox" id="w1-c0-i0" /> <span>филе лосося — 360 г</span></label></li><li><label><input type="checkbox" id="w1-c0-i1" /> <span>говядина (лопатка / для тушения и запекания) — 750 г</span></label></li><li><label><input type="checkbox" id="w1-c0-i2" /> <span>филе трески — 300 г</span></label></li></ul></section><section class="shop-cat"><h4>Яйца и молочные продукты</h4><ul><li><label><input type="checkbox" id="w1-c1-i0" /> <span>яйца — 9 шт</span></label></li><li><label><input type="checkbox" id="w1-c1-i1" /> <span>натуральный густой йогурт — 250 г</span></label></li><li><label><input type="checkbox" id="w1-c1-i2" /> <span>творог 5–9% — 200 г</span></label></li><li><label><input type="checkbox" id="w1-c1-i3" /> <span>молоко — 250 мл</span></label></li><li><label><input type="checkbox" id="w1-c1-i4" /> <span>сливочное масло — 15 г</span></label></li><li><label><input type="checkbox" id="w1-c1-i5" /> <span>гауда — 160 г</span></label></li><li><label><input type="checkbox" id="w1-c1-i7" /> <span>моцарелла — 80 г (для салатов со свёклой)</span></label></li><li><label><input type="checkbox" id="w1-c1-i6" /> <span>пармезан — 100 г</span></label></li></ul></section><section class="shop-cat"><h4>Крупы, злаки и хлеб</h4><ul><li><label><input type="checkbox" id="w1-c2-i0" /> <span>киноа — 60 г</span></label></li><li><label><input type="checkbox" id="w1-c2-i1" /> <span>овсяные хлопья долгой варки — 60 г</span></label></li><li><label><input type="checkbox" id="w1-c2-i2" /> <span>рис жасмин или басмати — 60 г</span></label></li><li><label><input type="checkbox" id="w1-c2-i3" /> <span>паста цельнозерновая — 160 г</span></label></li><li><label><input type="checkbox" id="w1-c2-i4" /> <span>гранола без сахара — 40 г</span></label></li><li><label><input type="checkbox" id="w1-c2-i5" /> <span>цельнозерновой хлеб — 1 буханка</span></label></li></ul></section><section class="shop-cat"><h4>Овощи</h4><ul><li><label><input type="checkbox" id="w1-c3-i0" /> <span>брокколи — 200 г</span></label></li><li><label><input type="checkbox" id="w1-c3-i1" /> <span>томаты черри — 600 г</span></label></li><li><label><input type="checkbox" id="w1-c3-i2" /> <span>томат обычный — 1 шт. (или черри к завтраку дня 1)</span></label></li><li><label><input type="checkbox" id="w1-c3-i3" /> <span>болгарский перец красный — 1 шт</span></label></li><li><label><input type="checkbox" id="w1-c3-i4" /> <span>морковь — 2 шт</span></label></li><li><label><input type="checkbox" id="w1-c3-i5" /> <span>картофель — 900 г</span></label></li><li><label><input type="checkbox" id="w1-c3-i6" /> <span>свёкла — 400 г (3 средних)</span></label></li><li><label><input type="checkbox" id="w1-c3-i7" /> <span>капуста белокочанная — 150 г</span></label></li><li><label><input type="checkbox" id="w1-c3-i8" /> <span>шпинат свежий — 160 г</span></label></li><li><label><input type="checkbox" id="w1-c3-i9" /> <span>рукола — 250 г</span></label></li><li><label><input type="checkbox" id="w1-c3-i10" /> <span>огурец — 4 шт</span></label></li><li><label><input type="checkbox" id="w1-c3-i11" /> <span>авокадо — 2 шт</span></label></li><li><label><input type="checkbox" id="w1-c3-i12" /> <span>репчатый лук — 1 шт</span></label></li><li><label><input type="checkbox" id="w1-c3-i13" /> <span>красный лук — 3 шт</span></label></li><li><label><input type="checkbox" id="w1-c3-i14" /> <span>чеснок — 2 головки</span></label></li></ul></section><section class="shop-cat"><h4>Фрукты и ягоды</h4><ul><li><label><input type="checkbox" id="w1-c4-i0" /> <span>лимон — 4 шт</span></label></li><li><label><input type="checkbox" id="w1-c4-i1" /> <span>апельсин — 2 шт</span></label></li><li><label><input type="checkbox" id="w1-c4-i2" /> <span>яблоко — 1 шт</span></label></li><li><label><input type="checkbox" id="w1-c4-i3" /> <span>груша — 1 шт</span></label></li><li><label><input type="checkbox" id="w1-c4-i4" /> <span>ягоды (черника, малина или клубника) — 80 г</span></label></li></ul></section><section class="shop-cat"><h4>Бобовые и консервы</h4><ul><li><label><input type="checkbox" id="w1-c5-i0" /> <span>чечевица зелёная или коричневая — 120 г</span></label></li><li><label><input type="checkbox" id="w1-c5-i1" /> <span>томаты консервированные в собственном соку — 1 банка 400 г</span></label></li><li><label><input type="checkbox" id="w1-c5-i2" /> <span>оливки без косточек — 120 г</span></label></li><li><label><input type="checkbox" id="w1-c5-i3" /> <span>каперсы — 2 ст. л. (1 баночка)</span></label></li></ul></section><section class="shop-cat"><h4>Масла, соусы и специи</h4><ul><li><label><input type="checkbox" id="w1-c6-i0" /> <span>оливковое масло — 250 мл</span></label></li><li><label><input type="checkbox" id="w1-c6-i1" /> <span>мисо-паста светлая — 1 ст. л</span></label></li><li><label><input type="checkbox" id="w1-c6-i2" /> <span>соевый соус — 2 ст. л</span></label></li><li><label><input type="checkbox" id="w1-c6-i3" /> <span>рисовый уксус — 1 ч. л</span></label></li><li><label><input type="checkbox" id="w1-c6-i4" /> <span>яблочный уксус — 2 ст. л</span></label></li><li><label><input type="checkbox" id="w1-c6-i5" /> <span>бальзамический уксус — 1 ч. л</span></label></li><li><label><input type="checkbox" id="w1-c6-i6" /> <span>томатная паста — 1 ст. л</span></label></li><li><label><input type="checkbox" id="w1-c6-i7" /> <span>кленовый сироп — 1 ч. л. (по желанию)</span></label></li><li><label><input type="checkbox" id="w1-c6-i8" /> <span>сахар — 1 ч. л</span></label></li><li><label><input type="checkbox" id="w1-c6-i9" /> <span>говяжий бульон — 400 мл</span></label></li><li><label><input type="checkbox" id="w1-c6-i10" /> <span>соль морская — по вкусу</span></label></li><li><label><input type="checkbox" id="w1-c6-i11" /> <span>перец чёрный молотый — по вкусу</span></label></li><li><label><input type="checkbox" id="w1-c6-i12" /> <span>зира молотая — ½ ч. л</span></label></li><li><label><input type="checkbox" id="w1-c6-i13" /> <span>паприка молотая — ½ ч. л</span></label></li><li><label><input type="checkbox" id="w1-c6-i14" /> <span>корица — ½ ч. л</span></label></li><li><label><input type="checkbox" id="w1-c6-i15" /> <span>орегано сушёный — 1 ч. л. (или свежий тимьян)</span></label></li><li><label><input type="checkbox" id="w1-c6-i16" /> <span>чили-хлопья — по желанию</span></label></li></ul></section><section class="shop-cat"><h4>Орехи и семечки</h4><ul><li><label><input type="checkbox" id="w1-c7-i0" /> <span>грецкие орехи и/или миндаль — 50 г</span></label></li><li><label><input type="checkbox" id="w1-c7-i1" /> <span>тыквенные семечки — 40 г</span></label></li><li><label><input type="checkbox" id="w1-c7-i2" /> <span>кунжут — 2 ч. л</span></label></li></ul></section><section class="shop-cat"><h4>Свежая зелень</h4><ul><li><label><input type="checkbox" id="w1-c8-i0" /> <span>петрушка — 1 пучок</span></label></li><li><label><input type="checkbox" id="w1-c8-i1" /> <span>укроп — небольшая горсть</span></label></li><li><label><input type="checkbox" id="w1-c8-i2" /> <span>кинза — небольшая горсть (по желанию, для шакшуки)</span></label></li><li><label><input type="checkbox" id="w1-c8-i3" /> <span>зелёный лук — 1 пучок</span></label></li><li><label><input type="checkbox" id="w1-c8-i4" /> <span>тимьян свежий — 1 пучок (около 8–10 веточек)</span></label></li><li><label><input type="checkbox" id="w1-c8-i5" /> <span>розмарин свежий — 2 веточки</span></label></li></ul></section></div>
       </div>
 
       
@@ -421,7 +421,7 @@ a { color: inherit; }
       <div class="recipe-hero">
         <figure class="recipe-photo">
           <div class="badge-arc"><span>#sekta</span></div>
-          <img src="img/dish-avocado.jpg" alt="Боул с киноа, авокадо, огурцом и яйцом вкрутую" loading="lazy" />
+          <img src="img/dish-quinoa.jpg" alt="Боул с киноа, авокадо, огурцом и яйцом вкрутую" loading="lazy" />
         </figure>
         <div class="recipe-head">
           <p class="eyebrow">обед</p>
@@ -465,7 +465,7 @@ a { color: inherit; }
         </div>
         <p class="note leftover-note"><strong>На завтра:</strong> Оставить для завтрашнего обеда · лосось — около 180 г · рис — около 100 г · брокколи – около 100 г</p><p class="note">Важно при беременности: рыбу готовить полностью, без сырой и слабосолёной.</p>
       </div>
-    </article>
+    <div class="swap-note"><strong>Если нет мисо-пасты:</strong> замени её соевым соусом; для более густого соуса можно добавить немного тахини.<br><strong>Если нет кленового сиропа:</strong> используй мёд, обычный сироп или готовь без подсластителя.<br><strong>Если нет рисового уксуса:</strong> замени яблочным уксусом или лимонным соком, добавляя понемногу.</div>\n    </article>
     </div>
         </section>
         <section class="day" id="d2">
@@ -631,7 +631,7 @@ a { color: inherit; }
         </div>
         <p class="note leftover-note"><strong>На завтра:</strong> Оставить для завтрашнего обеда: чечевицу с томатами — около 300 г.</p>
       </div>
-    </article>
+    <div class="swap-note"><strong>Если нет каперсов:</strong> возьми мелко нарезанные оливки или маринованный огурец.</div>\n    </article>
     </div>
         </section>
         <section class="day" id="d4">
@@ -774,30 +774,30 @@ a { color: inherit; }
       </div>
     </article>
     
-    <article class="recipe" id="d5-dinner" data-name="тёплый салат со свёклой, гаудой, апельсином и грецкими орехами">
+    <article class="recipe" id="d5-dinner" data-name="тёплый салат со свёклой, моцареллой, апельсином и грецкими орехами">
       <div class="recipe-hero">
         <figure class="recipe-photo">
           <div class="badge-arc"><span>#sekta</span></div>
-          <img src="img/dish-beet.jpg" alt="Тёплый салат со свёклой, гаудой, апельсином и грецкими орехами" loading="lazy" />
+          <img src="img/dish-beet.jpg" alt="Тёплый салат со свёклой, моцареллой, апельсином и грецкими орехами" loading="lazy" />
         </figure>
         <div class="recipe-head">
           <p class="eyebrow">ужин</p>
-          <h3>тёплый салат со свёклой, гаудой, апельсином и грецкими орехами</h3>
+          <h3>тёплый салат со свёклой, моцареллой, апельсином и грецкими орехами</h3>
           <div class="pills"><span class="pill">55 минут</span></div>
         </div>
       </div>
       <div class="recipe-body">
         <div>
           <h4>Ингредиенты</h4>
-          <ul><li>свёкла — 3 шт. средних (400 г)</li><li>гауда — 60 г</li><li>апельсин — 1 шт</li><li>грецкие орехи — 30 г</li><li>рукола — 60 г</li><li>оливковое масло — 2 ст. л</li><li>бальзамический уксус — 1 ч. л</li><li>соль, перец — по вкусу</li></ul>
+          <ul><li>свёкла — 3 шт. средних (400 г)</li><li>моцарелла — 60 г</li><li>апельсин — 1 шт</li><li>грецкие орехи — 30 г</li><li>рукола — 60 г</li><li>оливковое масло — 2 ст. л</li><li>бальзамический уксус — 1 ч. л</li><li>соль, перец — по вкусу</li></ul>
         </div>
         <div>
           <h4>Приготовление</h4>
-          <ol><li>Разогреть духовку до 200 °C.</li><li>Свёклу тщательно вымыть, завернуть каждую в фольгу. Запекать 40–45 минут до мягкости (проверить зубочисткой).</li><li>Достать, дать немного остыть, очистить и нарезать дольками.</li><li>Орехи поджарить на сухой сковороде 2–3 минуты, крупно порубить.</li><li>Апельсин очистить, разобрать на дольки или нарезать кружочками.</li><li>Гауду нарезать небольшими кубиками или поломать руками.</li><li>На тарелку выложить руколу, сверху — тёплую свёклу и дольки апельсина.</li><li>Посыпать гаудой и орехами, полить оливковым маслом и бальзамиком.</li></ol>
+          <ol><li>Разогреть духовку до 200 °C.</li><li>Свёклу тщательно вымыть, завернуть каждую в фольгу. Запекать 40–45 минут до мягкости (проверить зубочисткой).</li><li>Достать, дать немного остыть, очистить и нарезать дольками.</li><li>Орехи поджарить на сухой сковороде 2–3 минуты, крупно порубить.</li><li>Апельсин очистить, разобрать на дольки или нарезать кружочками.</li><li>Гауду нарезать небольшими кубиками или поломать руками.</li><li>На тарелку выложить руколу, сверху — тёплую свёклу и дольки апельсина.</li><li>Посыпать моцареллой и орехами, полить оливковым маслом и бальзамиком.</li></ol>
         </div>
         <p class="note leftover-note"><strong>На завтра:</strong> Отложить для завтрашнего обеда: свёклу запечённую — 150 г.</p>
       </div>
-    </article>
+    <div class="swap-note"><strong>Если нет бальзамического уксуса:</strong> подойдёт яблочный уксус или лимонный сок.</div>\n    </article>
     </div>
         </section>
         <section class="day" id="d6">
@@ -830,7 +830,7 @@ a { color: inherit; }
         </div>
         <p class="note">Важно при беременности: яйца готовить полностью — желток и белок должны схватиться.</p>
       </div>
-    </article>
+    <div class="swap-note"><strong>Если нет кинзы:</strong> подойдёт любая свежая зелень — петрушка, укроп или зелёный лук.</div>\n    </article>
     
     <article class="recipe leftover" id="d6-lunch" data-name="тёплый салат со свёклой, гаудой и апельсином">
       <div class="recipe-hero">
@@ -1048,7 +1048,7 @@ a { color: inherit; }
       <div class="recipe-hero">
         <figure class="recipe-photo">
           <div class="badge-arc"><span>#sekta</span></div>
-          <img src="img/dish-quinoa.jpg" alt="Киноа-каша с бананом, орехами и корицей" loading="lazy" />
+          <img src="img/dish-oatmeal.jpg" alt="Киноа-каша с бананом, орехами и корицей" loading="lazy" />
         </figure>
         <div class="recipe-head">
           <p class="eyebrow">завтрак</p>
@@ -1117,7 +1117,7 @@ a { color: inherit; }
         </div>
         <p class="note leftover-note"><strong>На завтра:</strong> Отложить для завтрашнего обеда · курица — 200 г · батат — 150 г · лук —½ шт · йогуртовый соус — 50 г</p><p class="note">Важно при беременности: птицу готовить полностью — сок должен быть прозрачным.</p>
       </div>
-    </article>
+    <div class="swap-note"><strong>Если нет хариссы:</strong> возьми сухую аджику или смесь паприки с щепоткой чили. Чили можно убрать.<br><strong>Если нет кинзы:</strong> подойдёт любая свежая зелень — петрушка, укроп или зелёный лук.</div>\n    </article>
     </div>
         </section>
         <section class="day" id="d9">
@@ -1200,7 +1200,7 @@ a { color: inherit; }
         </div>
         <p class="note leftover-note"><strong>На завтра:</strong> Отложить для завтрашнего обеда · нут с морковью — 200 г · тахини-соус — 50 г</p>
       </div>
-    </article>
+    <div class="swap-note"><strong>Если нет тахини:</strong> подойдёт арахисовая паста без сахара, натуральный йогурт или просто оливковое масло с лимонным соком.<br><strong>Если нет сумаха:</strong> добавь немного лимонного сока или тёртой лимонной цедры.</div>\n    </article>
     </div>
         </section>
         <section class="day" id="d10">
@@ -1399,7 +1399,7 @@ a { color: inherit; }
         </div>
         
       </div>
-    </article>
+    <div class="swap-note"><strong>Если нет тахини:</strong> подойдёт арахисовая паста без сахара, натуральный йогурт или просто оливковое масло с лимонным соком.</div>\n    </article>
     
     <article class="recipe leftover" id="d12-lunch" data-name="крем-суп из цветной капусты с крутонами">
       <div class="recipe-hero">
@@ -1463,7 +1463,7 @@ a { color: inherit; }
       <div class="recipe-hero">
         <figure class="recipe-photo">
           <div class="badge-arc"><span>#sekta</span></div>
-          <img src="img/dish-oatmeal.jpg" alt="Овсяноблин с творогом и рубленой зеленью" loading="lazy" />
+          <img src="img/dish-syrniki.jpg" alt="Овсяноблин с творогом и рубленой зеленью" loading="lazy" />
         </figure>
         <div class="recipe-head">
           <p class="eyebrow">завтрак</p>
@@ -1565,7 +1565,7 @@ a { color: inherit; }
         </div>
         
       </div>
-    </article>
+    <div class="swap-note"><strong>Если нет кленового сиропа:</strong> используй мёд, обычный сироп или готовь без подсластителя.</div>\n    </article>
     
     <article class="recipe leftover" id="d14-lunch" data-name="курица с цветной капустой и карри">
       <div class="recipe-hero">
@@ -1596,7 +1596,7 @@ a { color: inherit; }
       <div class="recipe-hero">
         <figure class="recipe-photo">
           <div class="badge-arc"><span>#sekta</span></div>
-          <img src="img/dish-quinoa.jpg" alt="Тёплый салат с яйцом вкрутую, печёными овощами и семечками" loading="lazy" />
+          <img src="img/dish-beet.jpg" alt="Тёплый салат с яйцом вкрутую, печёными овощами и семечками" loading="lazy" />
         </figure>
         <div class="recipe-head">
           <p class="eyebrow">ужин</p>
@@ -1833,7 +1833,7 @@ a { color: inherit; }
       <div class="recipe-hero">
         <figure class="recipe-photo">
           <div class="badge-arc"><span>#sekta</span></div>
-          <img src="img/dish-avocado.jpg" alt="Лосось запечённый с фенхелем и лимоном, салат с авокадо" loading="lazy" />
+          <img src="img/dish-salmon.jpg" alt="Лосось запечённый с фенхелем и лимоном, салат с авокадо" loading="lazy" />
         </figure>
         <div class="recipe-head">
           <p class="eyebrow">ужин</p>
@@ -1968,7 +1968,7 @@ a { color: inherit; }
         </div>
         
       </div>
-    </article>
+    <div class="swap-note"><strong>Если нет тахини:</strong> подойдёт арахисовая паста без сахара, натуральный йогурт или просто оливковое масло с лимонным соком.</div>\n    </article>
     
     <article class="recipe leftover" id="d18-lunch" data-name="индейка с кабачком, перцем и булгуром">
       <div class="recipe-hero">
@@ -2018,7 +2018,7 @@ a { color: inherit; }
         </div>
         <p class="note leftover-note"><strong>На завтра:</strong> Отложить для завтрашнего обеда · треска в томатах — 120 г · рис — 100 г (готовый)</p><p class="note">Важно при беременности: рыбу готовить полностью, без сырой и слабосолёной.</p>
       </div>
-    </article>
+    <div class="swap-note"><strong>Если нет каперсов:</strong> возьми мелко нарезанные оливки или маринованный огурец.</div>\n    </article>
     </div>
         </section>
         <section class="day" id="d19">
@@ -2115,7 +2115,7 @@ a { color: inherit; }
       <div class="recipe-hero">
         <figure class="recipe-photo">
           <div class="badge-arc"><span>#sekta</span></div>
-          <img src="img/dish-quinoa.jpg" alt="Киноа-каша с бананом, орехами и корицей" loading="lazy" />
+          <img src="img/dish-oatmeal.jpg" alt="Киноа-каша с бананом, орехами и корицей" loading="lazy" />
         </figure>
         <div class="recipe-head">
           <p class="eyebrow">завтрак</p>
@@ -2217,7 +2217,7 @@ a { color: inherit; }
         </div>
         <p class="note">Важно при беременности: яйца готовить полностью — желток и белок должны схватиться.</p>
       </div>
-    </article>
+    <div class="swap-note"><strong>Если нет кинзы:</strong> подойдёт любая свежая зелень — петрушка, укроп или зелёный лук.</div>\n    </article>
     
     <article class="recipe leftover" id="d21-lunch" data-name="курица с пюре из цветной капусты, салат с огурцом и мятой">
       <div class="recipe-hero">
@@ -2259,15 +2259,15 @@ a { color: inherit; }
       <div class="recipe-body">
         <div>
           <h4>Ингредиенты</h4>
-          <p class="ing-sub">Для лосося</p><ul><li>филе лосося — 200 г</li><li>лимон — 1 шт</li><li>чеснок — 2 зубчика</li><li>тимьян свежий — 2 веточки</li><li>розмарин свежий — 1 веточка</li><li>оливковое масло — 1 ст. л</li><li>соль, перец — по вкусу</li></ul><p class="ing-sub">Для тыквенного пюре</p><ul><li>тыква — 300 г</li><li>сливочное масло — 15 г</li><li>сливки 20% — 50 мл</li><li>мускатный орех — щепотка</li><li>соль — по вкусу</li></ul><p class="ing-sub">Для тёплого салата со свёклой</p><ul><li>свёкла — 2 шт. (250 г)</li><li>рукола — 50 г</li><li>грецкие орехи — 25 г</li><li>гауда — 40 г</li><li>оливковое масло — 1 ст. л</li><li>бальзамический уксус — 1 ч. л</li><li>соль, перец — по вкусу</li></ul>
+          <p class="ing-sub">Для лосося</p><ul><li>филе лосося — 200 г</li><li>лимон — 1 шт</li><li>чеснок — 2 зубчика</li><li>тимьян свежий — 2 веточки</li><li>розмарин свежий — 1 веточка</li><li>оливковое масло — 1 ст. л</li><li>соль, перец — по вкусу</li></ul><p class="ing-sub">Для тыквенного пюре</p><ul><li>тыква — 300 г</li><li>сливочное масло — 15 г</li><li>сливки 20% — 50 мл</li><li>мускатный орех — щепотка</li><li>соль — по вкусу</li></ul><p class="ing-sub">Для тёплого салата со свёклой</p><ul><li>свёкла — 2 шт. (250 г)</li><li>рукола — 50 г</li><li>грецкие орехи — 25 г</li><li>моцарелла — 40 г</li><li>оливковое масло — 1 ст. л</li><li>бальзамический уксус — 1 ч. л</li><li>соль, перец — по вкусу</li></ul>
         </div>
         <div>
           <h4>Приготовление</h4>
-          <ol><li>Разогреть духовку до 200 °C.</li><li>Свёклу тщательно вымыть, завернуть каждую в фольгу.</li><li>Запекать 40–45 минут — до полной мягкости.</li><li>Достать, немного остудить, очистить, нарезать дольками.</li><li>Тыкву очистить, нарезать кубиками по 3 см. Смешать с оливковым маслом, мускатным орехом, солью.</li><li>Выложить тыкву в форму для запекания, запекать при 200 °C 25–30 минут до мягкости.</li><li>Пробить тыкву погружным блендером со сливками и сливочным маслом до гладкого пюре. Посолить.</li><li>Лосось натереть солью и перцем. Выложить на форму для запекания.</li><li>Сверху положить кружочки лимона и веточки тимьяна и розмарина. Сбрызнуть оливковым маслом.</li><li>Запекать при 200 °C 18–20 минут до полной готовности рыбы.</li><li>Орехи поджарить на сухой сковороде 2–3 минуты, крупно порубить.</li><li>Гауду нарезать небольшими кусочками.</li><li>На тарелку выложить руколу, сверху — тёплую свёклу.</li><li>Посыпать гаудой и орехами, полить оливковым маслом и бальзамиком. Посолить и поперчить.</li><li>Подавать лосось с тыквенным пюре и тёплым салатом со свёклой на одной тарелке.</li></ol>
+          <ol><li>Разогреть духовку до 200 °C.</li><li>Свёклу тщательно вымыть, завернуть каждую в фольгу.</li><li>Запекать 40–45 минут — до полной мягкости.</li><li>Достать, немного остудить, очистить, нарезать дольками.</li><li>Тыкву очистить, нарезать кубиками по 3 см. Смешать с оливковым маслом, мускатным орехом, солью.</li><li>Выложить тыкву в форму для запекания, запекать при 200 °C 25–30 минут до мягкости.</li><li>Пробить тыкву погружным блендером со сливками и сливочным маслом до гладкого пюре. Посолить.</li><li>Лосось натереть солью и перцем. Выложить на форму для запекания.</li><li>Сверху положить кружочки лимона и веточки тимьяна и розмарина. Сбрызнуть оливковым маслом.</li><li>Запекать при 200 °C 18–20 минут до полной готовности рыбы.</li><li>Орехи поджарить на сухой сковороде 2–3 минуты, крупно порубить.</li><li>Гауду нарезать небольшими кусочками.</li><li>На тарелку выложить руколу, сверху — тёплую свёклу.</li><li>Посыпать моцареллой и орехами, полить оливковым маслом и бальзамиком. Посолить и поперчить.</li><li>Подавать лосось с тыквенным пюре и тёплым салатом со свёклой на одной тарелке.</li></ol>
         </div>
         <p class="note leftover-note"><strong>На завтра:</strong> Отложить для завтрашнего обеда · лосось запечённый — 100 г · тыквенное пюре — 150 г · свёкла запечённая — 100 г · Совет: свёклу удобно запечь заранее — она может стоять в духовке пока вы готовите тыкву и лосось</p><p class="note">Важно при беременности: рыбу готовить полностью, без сырой и слабосолёной.</p>
       </div>
-    </article>
+    <div class="swap-note"><strong>Если нет бальзамического уксуса:</strong> подойдёт яблочный уксус или лимонный сок.</div>\n    </article>
     </div>
         </section>
     </section>
@@ -2421,7 +2421,7 @@ a { color: inherit; }
         </div>
         <p class="note leftover-note"><strong>На завтра:</strong> Отложить для завтрашнего обеда · курица с каперсным соусом — 250 г · картофель — 150 г</p><p class="note">Важно при беременности: птицу готовить полностью — сок должен быть прозрачным.</p>
       </div>
-    </article>
+    <div class="swap-note"><strong>Если нет каперсов:</strong> возьми мелко нарезанные оливки или маринованный огурец.</div>\n    </article>
     </div>
         </section>
         <section class="day" id="d23">
@@ -2836,7 +2836,7 @@ a { color: inherit; }
         </div>
         <p class="note leftover-note"><strong>На завтра:</strong> Отложить для завтрашнего обеда · курица в арахисовом соусе — 250 г · рис — 120 г</p><p class="note">Важно при беременности: птицу готовить полностью — сок должен быть прозрачным.</p>
       </div>
-    </article>
+    <div class="swap-note"><strong>Если нет кинзы:</strong> подойдёт любая свежая зелень — петрушка, укроп или зелёный лук.</div>\n    </article>
     </div>
         </section>
         <section class="day" id="d28">
@@ -2919,7 +2919,7 @@ a { color: inherit; }
         </div>
         <p class="note leftover-note"><strong>На завтра:</strong> Отложить для завтрашнего обеда · стейк с перечным соусом — 100 г · картофельное пюре — 150 г · Совет: пюре при разогреве может загустеть — добавьте каплю молока и размешайте на медленном огне</p>
       </div>
-    </article>
+    <div class="swap-note"><strong>Если нет бальзамического уксуса:</strong> подойдёт яблочный уксус или лимонный сок.</div>\n    </article>
     </div>
         </section>
     </section>
@@ -3023,7 +3023,7 @@ a { color: inherit; }
         </div>
         
       </div>
-    </article>
+    <div class="swap-note"><strong>Если нет тахини:</strong> подойдёт арахисовая паста без сахара, натуральный йогурт или просто оливковое масло с лимонным соком.</div>\n    </article>
     
     <article class="recipe leftover" id="d29-lunch" data-name="стейк с перечным соусом и картофельным пюре">
       <div class="recipe-hero">
@@ -3156,7 +3156,7 @@ a { color: inherit; }
         </div>
         <p class="note leftover-note"><strong>На завтра:</strong> Отложить для завтрашнего обеда · крем-суп из батата — 1 порция (около 400 мл)</p>
       </div>
-    </article>
+    <div class="swap-note"><strong>Если нет кинзы:</strong> подойдёт любая свежая зелень — петрушка, укроп или зелёный лук.</div>\n    </article>
     </div>
         </section>
         <section class="day" id="d31">
@@ -3386,7 +3386,7 @@ a { color: inherit; }
       <div class="recipe-hero">
         <figure class="recipe-photo">
           <div class="badge-arc"><span>#sekta</span></div>
-          <img src="img/dish-soup.jpg" alt="Куриный суп с лапшой, луком-пореем и сельдереем" loading="lazy" />
+          <img src="img/dish-chicken.jpg" alt="Куриный суп с лапшой, луком-пореем и сельдереем" loading="lazy" />
         </figure>
         <div class="recipe-head">
           <p class="eyebrow">ужин</p>
@@ -3419,7 +3419,7 @@ a { color: inherit; }
       <div class="recipe-hero">
         <figure class="recipe-photo">
           <div class="badge-arc"><span>#sekta</span></div>
-          <img src="img/dish-oatmeal.jpg" alt="Блинчики цельнозерновые с творогом и мёдом" loading="lazy" />
+          <img src="img/dish-syrniki.jpg" alt="Блинчики цельнозерновые с творогом и мёдом" loading="lazy" />
         </figure>
         <div class="recipe-head">
           <p class="eyebrow">завтрак</p>
@@ -3488,7 +3488,7 @@ a { color: inherit; }
         </div>
         <p class="note leftover-note"><strong>На завтра:</strong> Отложить для завтрашнего обеда · треска с каперсным соусом — 150 г · картофель — 150 г</p><p class="note">Важно при беременности: рыбу готовить полностью, без сырой и слабосолёной.</p>
       </div>
-    </article>
+    <div class="swap-note"><strong>Если нет каперсов:</strong> возьми мелко нарезанные оливки или маринованный огурец.</div>\n    </article>
     </div>
         </section>
         <section class="day" id="d35">
@@ -3571,7 +3571,7 @@ a { color: inherit; }
         </div>
         
       </div>
-    </article>
+    <div class="swap-note"><strong>Если нет тахини:</strong> подойдёт арахисовая паста без сахара, натуральный йогурт или просто оливковое масло с лимонным соком.<br><strong>Если нет кинзы:</strong> подойдёт любая свежая зелень — петрушка, укроп или зелёный лук.</div>\n    </article>
     </div>
         </section>
     </section>
