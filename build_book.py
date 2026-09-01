@@ -359,6 +359,49 @@ def safety_note(recipe: dict) -> str | None:
     return "Важно при беременности: " + "; ".join(bits) + "."
 
 
+def apply_editorial_overrides(days: list[dict]) -> None:
+    for day in days:
+        if day["num"] != 8:
+            continue
+        for recipe in day["recipes"]:
+            title = recipe["title"].lower()
+            if recipe["meal"] != "Ужин" or "харисс" not in title:
+                continue
+
+            for section in recipe["sections"]:
+                items = []
+                for item in section["items"]:
+                    lower = item.lower()
+                    if lower.startswith("зира") or lower.startswith("чеснок"):
+                        continue
+                    if lower.startswith("курин"):
+                        item = "куриные бёдра без кости — 500 г"
+                    elif lower.startswith("харисса"):
+                        item = (
+                            "харисса — 2 ст. л. (для более мягкого вкуса — 1 ст. л.; "
+                            "готовая или домашняя: измельчённые хлопья чили, зира, "
+                            "кориандр, сухой чеснок и паприка)"
+                        )
+                    elif lower.startswith("батат"):
+                        item = "батат — 500 г"
+                    items.append(item)
+                section["items"] = items
+
+            recipe["steps"] = [
+                "Курицу смешать с хариссой, солью и 1 ст. л. масла. Оставить мариноваться 20 минут.",
+                "Красный лук нарезать тонкими кольцами, залить уксусом, сахаром и щепоткой соли. Оставить на 20 минут.",
+                "Батат очистить, нарезать дольками, смешать с оставшимся маслом, посолить.",
+                "Разогреть духовку до 200 °C.",
+                "Батат выложить на противень, запекать 15 минут.",
+                "Добавить курицу на противень к батату, запекать ещё 30 минут до полной готовности.",
+                "Йогурт смешать с рубленой зеленью и щепоткой соли — без чеснока, чтобы смягчить остроту хариссы.",
+                "Подавать курицу с бататом, маринованным луком, йогуртовым соусом и зеленью.",
+            ]
+            recipe["notes"].append(
+                "Для более мягкого вкуса использовать 1 ст. л. хариссы; блюдо получается острым."
+            )
+
+
 def parse_all() -> list[dict]:
     lines = [ln.strip() for ln in EXTRACT.read_text(encoding="utf-8").splitlines()]
     weeks_out = []
@@ -374,6 +417,7 @@ def parse_all() -> list[dict]:
         toc = parse_toc(wlines[1:shop_i])
         shop = parse_shop(wlines[shop_i + 1 : rec_i])
         days = parse_recipes(wlines[rec_i:])
+        apply_editorial_overrides(days)
         # finish last recipe if the extract was cut
         if days and days[-1]["recipes"]:
             last = days[-1]["recipes"][-1]
