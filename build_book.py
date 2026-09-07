@@ -55,19 +55,19 @@ IMAGE_RULES = [
     (r"лосось с кунжутом", "dish-salmon-sesame.jpg"),
     (r"лосось терияки", "dish-salmon.jpg"),
     (r"лосос", "dish-salmon.jpg"),
-    (r"говядина запечённая", "dish-beef-baked.jpg"),
+    (r"говядина запечённая", "dish-beef.jpg"),
     (r"чернослив", "dish-beef-polenta.jpg"),
     (r"говядина.*гриб", "dish-beef-mushroom-polenta.jpg"),
     (r"стейк", "dish-steak-mash.jpg"),
     (r"говядина.*перцем.*булгур", "dish-beef-bulgur.jpg"),
     (r"говядина, тушёная с томатами", "dish-beef-quinoa.jpg"),
     (r"стейк|говядин", "dish-beef.jpg"),
-    (r"куриные бёдра с апельсином|курица с апельсином", "dish-chicken-orange.jpg"),
+    (r"куриные бёдра с апельсином|курица с апельсином", "dish-chicken-cauliflower.jpg"),
     (r"курица с цветной капустой", "dish-chicken-curry.jpg"),
     (r"куриные бёдра с чесноком", "dish-chicken-cauliflower.jpg"),
     (r"куриные бёдра с лимоном|курица с лимоном", "dish-chicken-capers-potato.jpg"),
     (r"куриные бёдра в соусе из арахиса|курица в арахисовом", "dish-chicken-peanut-rice.jpg"),
-    (r"куриные бёдра с медово", "dish-chicken-mustard-batat.jpg"),
+    (r"куриные бёдра с медово", "dish-chicken.jpg"),
     (r"куриный суп", "dish-chicken-noodle.jpg"),
     (r"индейк", "dish-turkey-bulgur.jpg"),
     (r"куриц|бёдр", "dish-chicken.jpg"),
@@ -271,8 +271,6 @@ def parse_meal(lines: list[str], i: int) -> tuple[dict, int]:
             if raw.startswith("Приготовление") or looks_like_new_block(raw):
                 break
             if raw.startswith("Для ") and raw.endswith(":"):
-                if current_items:
-                    sections.append({"name": current_name, "items": current_items})
                 current_name = raw[:-1]
                 current_items = []
                 i += 1
@@ -281,6 +279,22 @@ def parse_meal(lines: list[str], i: int) -> tuple[dict, int]:
             i += 1
         if current_items:
             sections.append({"name": current_name, "items": current_items})
+
+    # Keep garnish/sub-recipe labels out of ingredient bullet lists.
+    normalized_sections: list[dict] = []
+    for section in sections:
+        current = {"name": section["name"], "items": []}
+        for item in section["items"]:
+            marker = item.strip().rstrip(":").lower()
+            if marker in {"на гарнир", "для гарнира"}:
+                if current["items"]:
+                    normalized_sections.append(current)
+                current = {"name": "На гарнир", "items": []}
+            else:
+                current["items"].append(item)
+        if current["items"]:
+            normalized_sections.append(current)
+    sections = normalized_sections
 
     while i < n and not lines[i].strip():
         i += 1
@@ -386,6 +400,12 @@ def safety_note(recipe: dict) -> str | None:
         bits.append("рыбу готовить полностью, без сырой и слабосолёной")
     if any(w in blob for w in ("куриц", "индейк", "бёдр")):
         bits.append("птицу готовить полностью — сок должен быть прозрачным")
+    if "стейк" in blob:
+        bits.append(
+            "для курса беременных не использовать формулировку «желаемая прожарка»: "
+            "согласовать с профильным редактором безопасную внутреннюю температуру и "
+            "готовить с термометром"
+        )
     if not bits:
         return None
     return "Важно при беременности: " + "; ".join(bits) + "."
@@ -429,6 +449,117 @@ def apply_editorial_overrides(days: list[dict]) -> None:
                 "Йогурт смешать с рубленой зеленью и щепоткой соли.",
                 "Подавать курицу с бататом, маринованным луком, йогуртовым соусом и зеленью.",
             ]
+
+
+def apply_manual_overrides(weeks: list[dict]) -> None:
+    """Keep the checked corrections in the generated source as well as in index.html."""
+    def recipe(day_num: int, meal: str) -> dict | None:
+        for week in weeks:
+            for day in week["days"]:
+                if day["num"] == day_num:
+                    return next((r for r in day["recipes"] if r["meal"] == meal), None)
+        return None
+
+    d14_lunch = recipe(14, "Обед")
+    if d14_lunch and "салат со свёклой" not in d14_lunch["title"].lower():
+        d14_lunch["title"] += ", салат со свёклой"
+    d19_lunch = recipe(19, "Обед")
+    if d19_lunch:
+        d19_lunch["title"] = d19_lunch["title"].replace("картофелем", "бурым рисом")
+    d19_dinner = recipe(19, "Ужин")
+    if d19_dinner and "киноа" not in d19_dinner["title"].lower():
+        d19_dinner["title"] += ", киноа"
+    if d19_dinner:
+        d19_dinner["steps"] = [
+            s.replace("150 г киноа", "100 г киноа").replace("300 мл кипятка", "200 мл кипятка")
+            for s in d19_dinner["steps"]
+        ]
+    d20_lunch = recipe(20, "Обед")
+    if d20_lunch:
+        d20_lunch["steps"] = [s.replace("Картофель", "Киноа") for s in d20_lunch["steps"]]
+    d35_dinner = recipe(35, "Ужин")
+    if d35_dinner:
+        d35_dinner["title"] = "боул с киноа, нутом, печёными овощами и соусом тахини"
+    d34_breakfast = recipe(34, "Завтрак")
+    if d34_breakfast:
+        d34_breakfast["steps"] = [
+            "Яйца взбить с молоком и щепоткой соли.",
+            "Просеять муку, постепенно вмешать в яично-молочную смесь.",
+            "Добавить растопленное масло. Тесто должно быть жидким — жиже сметаны.",
+            "Оставить тесто на 15 минут — клейковина набухнет, и блины будут эластичнее.",
+            "Творог смешать с мёдом, ванилью и апельсиновой цедрой до однородности.",
+            "Разогреть сковороду, смазать тонким слоем масла.",
+            "Налить тонкий слой теста, распределить по всей сковороде.",
+            "Жарить 1,5–2 минуты с первой стороны и 1 минуту со второй.",
+            "Выложить на блин ложку творожной начинки, завернуть или сложить треугольником.",
+            "По желанию добавить ломтики апельсина при подаче.",
+        ]
+        d34_breakfast["leftover"] = []
+
+    for week in weeks:
+        for toc in week["toc"]:
+            if toc["num"] == 18 and len(toc["meals"]) >= 3:
+                toc["meals"][2] = "Треска в томатах с оливками, каперсами и бурым рисом"
+            elif toc["num"] == 19 and len(toc["meals"]) >= 3:
+                toc["meals"][1] = "Треска с томатами и бурым рисом, салат из капусты с яблоком"
+                toc["meals"][2] = "Говядина, тушёная с томатами, чесноком и розмарином, киноа"
+            elif toc["num"] == 14 and len(toc["meals"]) >= 2:
+                toc["meals"][1] = "Курица с цветной капустой, салат со свёклой"
+
+    for day_num, meal in ((8, "Ужин"), (13, "Ужин")):
+        r = recipe(day_num, meal)
+        if not r:
+            continue
+        r["leftover"] = [
+            text.replace("батат — 150 г", "батат — 100 г")
+            .replace("цветная капуста с соусом — 150 г", "цветная капуста с соусом — 100 г")
+            for text in r["leftover"]
+        ]
+
+    for r in (recipe(18, "Обед"), recipe(26, "Обед"), recipe(32, "Обед")):
+        if not r:
+            continue
+        r["steps"] = [
+            (s[:1].upper() + s[1:] if s else s).replace("воды если", "воды, если")
+            for s in r["steps"]
+        ]
+    d20_dinner = recipe(20, "Ужин")
+    if d20_dinner:
+        seen_smooth = False
+        cleaned = []
+        for step in d20_dinner["steps"]:
+            if "Пробить погружным блендером до абсолютно гладкой консистенции" in step:
+                if seen_smooth:
+                    step = "Проверить консистенцию и при необходимости добавить немного сливок."
+                seen_smooth = True
+            cleaned.append(step)
+        d20_dinner["steps"] = cleaned
+
+    for week in weeks:
+        for cat in week["shop"]:
+            cat["items"] = [
+                item.replace("и/ или", "и/или")
+                .replace(" (или оливки / маринованный огурец). (или оливки / маринованный огурец)", " (или оливки / маринованный огурец)")
+                for item in cat["items"]
+                if "─────────────────────" not in item
+                and not (week["num"] == 3 and "чернослив без косточек" in item)
+                and not (week["num"] == 5 and "белое вино" in item)
+            ]
+        if week["num"] == 1:
+            next((c for c in week["shop"] if c["name"] == "Масла, соусы и специи"), {"items": []})["items"].append("лавровый лист — 1 шт")
+        if week["num"] == 3:
+            def add(name: str, item: str) -> None:
+                cat = next(c for c in week["shop"] if c["name"] == name)
+                if not any(item.split(" — ", 1)[0] in x for x in cat["items"]):
+                    cat["items"].append(item)
+            add("Крупы, злаки и хлеб", "бурый рис — 100 г")
+            add("Овощи", "сельдерей — 1 стебель")
+            add("Яйца и молочные продукты", "моцарелла — 100 г")
+            for cat in week["shop"]:
+                cat["items"] = [
+                    "киноа — 160 г" if item.startswith("киноа —") else item
+                    for item in cat["items"]
+                ]
 
 
 def parse_all() -> list[dict]:
@@ -475,14 +606,22 @@ def parse_all() -> list[dict]:
                 "days": days,
             }
         )
+    apply_manual_overrides(weeks_out)
     return weeks_out
 
 
 def e(text: str) -> str:
-    return html.escape(text or "")
+    text = text or ""
+    text = re.sub(r"(?<=\d)г\b", " г", text)
+    text = text.replace("и/ или", "и/или")
+    text = re.sub(r"\bшт(?!\.)\b", "шт.", text)
+    text = re.sub(r"\bст\. л(?!\.)\b", "ст. л.", text)
+    text = re.sub(r"\bч\. л(?!\.)\b", "ч. л.", text)
+    text = re.sub(r" {2,}", " ", text)
+    return html.escape(text)
 
 
-def render_ingredient(item: str) -> str:
+def render_ingredient(item: str, recipe_id: str | None = None) -> str:
     match = re.match(
         r"^(.*?)\s+(\([^)]*готовили в (?:(\d+)\s+д(?:ень|не)|д(?:ень|не)\s+(\d+))\))(\s+—.*)$",
         item,
@@ -492,8 +631,16 @@ def render_ingredient(item: str) -> str:
         return e(item)
     label, reference, day_before, day_after, suffix = match.groups()
     day = int(day_before or day_after)
+    target = f"d{day}-dinner"
+    label_lower = label.lower()
+    if recipe_id == "d2-lunch" and "маринованный лук" in label_lower:
+        target = "d1-lunch"
+    elif recipe_id == "d10-lunch" and "булгур" in label_lower:
+        target = "d9-lunch"
+    elif recipe_id == "d12-lunch" and label_lower == "рис":
+        target = "d11-lunch"
     return (
-        f'<a class="prep-link" href="#d{day}-dinner">{e(label)}</a> '
+        f'<a class="prep-link" href="#{target}">{e(label)}</a> '
         f'{e(reference)}{e(suffix)}'
     )
 
@@ -510,8 +657,14 @@ def render_recipe(day_num: int, recipe: dict) -> str:
     for sec in recipe["sections"]:
         if sec["name"] and sec["name"] != "Ингредиенты":
             ings.append(f'<p class="ing-sub">{e(sec["name"])}</p>')
-        ings.append("<ul>" + "".join(f"<li>{render_ingredient(it)}</li>" for it in sec["items"]) + "</ul>")
-    steps = "<ol>" + "".join(f"<li>{e(s)}</li>" for s in recipe["steps"]) + "</ol>"
+        ings.append("<ul>" + "".join(f"<li>{render_ingredient(it, rid)}</li>" for it in sec["items"]) + "</ul>")
+    rendered_steps = []
+    for step in recipe["steps"]:
+        if step.strip().lower().rstrip(":") in {"приготовление поленты", "для поленты"}:
+            rendered_steps.append(f'<li class="step-sub">{e(step.rstrip(":"))}</li>')
+        else:
+            rendered_steps.append(f"<li>{e(step)}</li>")
+    steps = "<ol>" + "".join(rendered_steps) + "</ol>"
     leftover = ""
     if recipe["leftover"]:
         leftover = (
@@ -741,11 +894,26 @@ a { color: inherit; }
   border-color: var(--terra);
   background: rgba(198, 102, 69, 0.1);
 }
-.search { margin-left: auto; }
+.search { margin-left: auto; display: flex; gap: 0.35rem; align-items: center; }
 .search input {
   width: min(16rem, 42vw);
   font-weight: 500;
   background: #fff;
+}
+.search input { flex: 1 1 12rem; min-width: 0; }
+.search select {
+  font: inherit; font-size: 0.72rem; font-weight: 600;
+  padding: 0.38rem 0.7rem;
+  border: 1.5px solid var(--line); border-radius: var(--radius-pill);
+  background: #fff; color: var(--ink); cursor: pointer;
+}
+.search-empty {
+  margin: 1rem 0;
+  padding: 0.8rem 1rem;
+  background: #fff;
+  border-left: 3px solid var(--terra);
+  color: var(--ink-soft);
+  font-size: 0.78rem;
 }
 .page { max-width: var(--page); margin: 0 auto; padding: 1rem var(--pad) 4rem; }
 .how {
@@ -895,6 +1063,13 @@ a { color: inherit; }
   font-size: 0.68rem; line-height: 1.32;
 }
 .recipe-body li + li { margin-top: 0.12rem; }
+.recipe-body li.step-sub {
+  list-style: none;
+  margin-left: -0.95rem;
+  margin-top: 0.65rem;
+  font-weight: 700;
+  color: var(--ink);
+}
 .recipe-body .prep-link {
   color: var(--terra-deep);
   font-weight: 600;
@@ -939,7 +1114,7 @@ a { color: inherit; }
 @media (max-width: 820px) {
   .intro { grid-template-columns: 96px 1fr 1.4fr; }
   .search { margin-left: 0; width: 100%; }
-  .search input { width: 100%; }
+  .search input { width: auto; }
 }
 @media (max-width: 560px) {
   body { overflow-x: hidden; }
@@ -1040,17 +1215,116 @@ document.querySelectorAll('.week-chips a[href$="-toc"]').forEach(link => {
     }
   });
 });
+const normalizeSearch = value => value.toLowerCase().replaceAll('ё', 'е').replace(/[^а-яa-z0-9]+/g, ' ').trim();
 const search = document.getElementById('q');
-search.addEventListener('input', () => {
-  const q = search.value.trim().toLowerCase();
-  document.querySelectorAll('.recipe').forEach(el => {
-    el.classList.toggle('hidden', q && !el.dataset.name.includes(q));
+const weekFilter = document.getElementById('week-filter');
+const emptyMessage = document.getElementById('search-empty');
+const tokenMatches = (haystack, query) => {
+  const hay = normalizeSearch(haystack).split(/\s+/).filter(Boolean);
+  return normalizeSearch(query).split(/\s+/).filter(Boolean).every(token => {
+    const root = token.length > 5 ? token.slice(0, -2) : token;
+    return hay.some(word => word === token || word.startsWith(root) || token.startsWith(word.slice(0, -1)));
   });
-  document.querySelectorAll('.day').forEach(day => {
-    const vis = [...day.querySelectorAll('.recipe')].some(r => !r.classList.contains('hidden'));
-    day.style.display = vis ? '' : 'none';
+};
+const applyFilters = () => {
+  const query = search.value.trim();
+  const chosenWeek = weekFilter.value;
+  let visibleRecipes = 0;
+  document.querySelectorAll('.week').forEach(week => {
+    const weekNumber = week.id.replace('week-', '');
+    const weekAllowed = chosenWeek === 'all' || chosenWeek === weekNumber;
+    let weekHasVisibleDay = false;
+    week.querySelectorAll('.day').forEach(day => {
+      let dayHasVisibleRecipe = false;
+      day.querySelectorAll('.recipe').forEach(recipe => {
+        const searchable = recipe.innerText || recipe.textContent || '';
+        const matches = !query || tokenMatches(searchable, query);
+        recipe.classList.toggle('hidden', !matches);
+        if (matches) { dayHasVisibleRecipe = true; visibleRecipes += 1; }
+      });
+      day.style.display = weekAllowed && dayHasVisibleRecipe ? '' : 'none';
+      if (weekAllowed && dayHasVisibleRecipe) weekHasVisibleDay = true;
+    });
+    week.style.display = weekAllowed && (weekHasVisibleDay || !query) ? '' : 'none';
   });
+  emptyMessage.hidden = Boolean(!query || visibleRecipes);
+};
+search.addEventListener('input', applyFilters);
+weekFilter.addEventListener('change', applyFilters);
+applyFilters();
+const setShopItem = (id, text) => {
+  const input = document.getElementById(id);
+  if (input) input.nextElementSibling.textContent = text;
+};
+const removeShopItem = id => document.getElementById(id)?.closest('li')?.remove();
+const addShopItem = (shopId, id, text) => {
+  if (document.getElementById(id)) return;
+  const categoryIndex = Number(id.match(/-c(\d+)-/)?.[1] || 0) + 1;
+  const category = document.querySelector(`#${shopId} .shop-grid .shop-cat:nth-child(${categoryIndex})`);
+  if (!category) return;
+  const li = document.createElement('li');
+  li.innerHTML = `<label><input type="checkbox" id="${id}" /> <span>${text}</span></label>`;
+  category.querySelector('ul').append(li);
+};
+const fixShopLists = () => {
+  setShopItem('w1-c5-i3', 'каперсы — 2 ст. л. (или оливки / маринованный огурец)');
+  setShopItem('w3-c5-i2', 'каперсы — 2 ст. л. (или оливки / маринованный огурец)');
+  setShopItem('w3-c2-i2', 'киноа — 160 г');
+  setShopItem('w3-c7-i0', 'грецкие орехи и/или миндаль — 70 г');
+  addShopItem('week-1-shop', 'w1-c6-bay-leaf', 'лавровый лист — 1 шт.');
+  addShopItem('week-3-shop', 'w3-c2-brown-rice', 'бурый рис — 100 г');
+  addShopItem('week-3-shop', 'w3-c3-celery', 'сельдерей — 1 стебель');
+  addShopItem('week-3-shop', 'w3-c1-mozzarella', 'моцарелла — 100 г');
+  removeShopItem('w2-c8-i6');
+  removeShopItem('w3-c5-i3');
+  removeShopItem('w5-c6-i12');
+};
+fixShopLists();
+document.querySelectorAll('.shop input[type="checkbox"]').forEach(cb => {
+  cb.checked = localStorage.getItem(cb.id) === '1';
+  cb.addEventListener('change', () => localStorage.setItem(cb.id, cb.checked ? '1' : '0'));
 });
+const normalizeEditorialText = text => text
+  .replace(/(?<=\d)г\b/g, ' г')
+  .replace(/и\/ или/g, 'и/или')
+  .replace(/\bшт(?!\.)\b/g, 'шт.')
+  .replace(/\bст\. л(?!\.)\b/g, 'ст. л.')
+  .replace(/\bч\. л(?!\.)\b/g, 'ч. л.')
+  .replace(/ {2,}/g, ' ');
+document.querySelectorAll('.recipe, .shop, .toc-table, .how').forEach(root => {
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  const nodes = [];
+  while (walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { node.nodeValue = normalizeEditorialText(node.nodeValue); });
+});
+const imageFixes = {
+  'd9-dinner': 'img/dish-chickpea.jpg', 'd10-lunch': 'img/dish-chickpea.jpg',
+  'd10-dinner': 'img/dish-chicken-cauliflower.jpg',
+  'd29-dinner': 'img/dish-chicken.jpg', 'd30-lunch': 'img/dish-chicken.jpg',
+  'd23-dinner': 'img/dish-lentil-soup.jpg', 'd24-lunch': 'img/dish-lentil-soup.jpg',
+  'd30-dinner': 'img/dish-sweet-potato-soup.jpg', 'd31-lunch': 'img/dish-sweet-potato-soup.jpg',
+  'd33-dinner': 'img/dish-chicken-noodle.jpg', 'd34-lunch': 'img/dish-chicken-noodle.jpg',
+  'd34-breakfast': 'img/dish-wholegrain-pancakes.jpg',
+  'd28-dinner': 'img/dish-steak-mash.jpg', 'd29-lunch': 'img/dish-steak-mash.jpg',
+  'd20-breakfast': 'img/dish-quinoa-porridge.jpg',
+  'd11-breakfast': 'img/dish-cottage-casserole.jpg', 'd31-breakfast': 'img/dish-cottage-casserole.jpg',
+  'd17-dinner': 'img/dish-turkey-bulgur.jpg', 'd18-lunch': 'img/dish-turkey-bulgur.jpg',
+  'd13-dinner': 'img/dish-chicken-curry.jpg', 'd14-lunch': 'img/dish-chicken-curry.jpg',
+  'd14-dinner': 'img/dish-egg-roasted-veg.jpg'
+};
+Object.entries(imageFixes).forEach(([id, src]) => {
+  const image = document.querySelector(`#${id} img`);
+  if (image) image.src = src;
+});
+const steakStep = document.querySelector('#d28-dinner .recipe-body ol li:nth-child(12)');
+if (steakStep) steakStep.textContent = 'Жарить стейк до безопасной внутренней температуры, согласованной с профильным редактором курса; проверить термометром. Формулировку про среднюю или желаемую прожарку для беременных не использовать до согласования.';
+const steakBody = document.querySelector('#d28-dinner .recipe-body');
+if (steakBody && !steakBody.querySelector('.safety-note')) {
+  const note = document.createElement('p');
+  note.className = 'note safety-note';
+  note.innerHTML = 'Безопасность: для беременных не подавать стейк сырым или недоготовленным. Согласовать с профильным редактором безопасную внутреннюю температуру и готовить с термометром.';
+  steakBody.append(note);
+}
 const weekLinks = [...document.querySelectorAll('.weeks-nav a[href^="#week-"]')];
 const weeks = [...document.querySelectorAll('.week')];
 const io = new IntersectionObserver(entries => {
@@ -1102,11 +1376,16 @@ def build_html(weeks: list[dict]) -> str:
       {week_links}
       <label class="search">
         <input id="q" type="search" placeholder="найти блюдо" />
+        <select id="week-filter" aria-label="Искать в неделе">
+          <option value="all">все недели</option>
+          {''.join(f'<option value="{w["num"]}">неделя {w["num"]}</option>' for w in weeks)}
+        </select>
       </label>
     </div>
   </nav>
 
   <main class="page">
+    <p id="search-empty" class="search-empty" role="status" hidden>Ничего не найдено.</p>
     <aside class="how">
       <div>
         <p class="eyebrow">как пользоваться</p>
