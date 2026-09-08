@@ -655,13 +655,13 @@ a { color: inherit; }
       <div class="recipe-body">
         <div>
           <h4>Ингредиенты</h4>
-          <ul><li>говядина (для тушения) — 400 г</li><li>репчатый лук — 1 шт</li><li>морковь — 2 шт</li><li>чеснок — 3 зубчика</li><li>томатная паста — 1 ст. л</li><li>говяжий бульон — 400 мл</li><li>тимьян — 3–4 веточки</li><li>лавровый лист — 2 шт</li><li>картофель — 300 г</li><li>оливковое масло — 2 ст. л</li><li>соль, перец — по вкусу</li><li>петрушка — для подачи</li></ul>
+          <ul><li>говядина (для тушения) — 400 г</li><li>репчатый лук — 1 шт</li><li>морковь — 2 шт</li><li>чеснок — 3 зубчика</li><li>томатная паста — 1 ст. л</li><li>говяжий бульон — 400 мл (или вода)</li><li>тимьян — 3–4 веточки</li><li>лавровый лист — 2 шт</li><li>картофель — 300 г</li><li>оливковое масло — 2 ст. л</li><li>соль, перец — по вкусу</li><li>петрушка — для подачи</li></ul>
         </div>
         <div>
           <h4>Приготовление</h4>
           <ol><li>Говядину нарезать крупными кусками (4–5 см), обсушить бумажным полотенцем.</li><li>Разогреть масло в тяжёлой кастрюле или казане на сильном огне, обжарить мясо порциями до румяной корочки со всех сторон. Переложить на тарелку.</li><li>В той же кастрюле обжарить нарезанный полукольцами лук 4–5 минут.</li><li>Добавить нарезанную кружочками морковь и раздавленный чеснок, готовить 2 минуты.</li><li>Добавить томатную пасту, перемешать, готовить 1 минуту.</li><li>Вернуть мясо в кастрюлю, влить бульон. Добавить тимьян и лавровый лист.</li><li>Довести до кипения, убавить огонь до минимума, тушить под крышкой 1 час 20 минут.</li><li>За 25 минут до конца картофель очистить, нарезать крупными кусками одинакового размера, опустить в кипящую подсоленную воду и варить 20–25 минут до полной мягкости.</li><li>Посыпать рубленой петрушкой и подавать.</li></ol>
         </div>
-        <p class="note leftover-note"><strong>На завтра:</strong> Оставить для завтрашнего обеда · говядину с овощами — около 300 г · картофель — около 150 г</p>
+        <p class="note leftover-note"><strong>На завтра:</strong> Оставить для завтрашнего обеда · говядину с овощами — около 300 г · картофель — около 150 г</p><p class="note">Бульон можно взять готовый, заменить водой или сварить самостоятельно из свежих овощей и зелени. После приготовления быстро остудить, перелить в закрытую ёмкость и хранить в холодильнике при температуре до 4 °C не более 3–4 дней; если не планируешь использовать его за это время, заморозить.</p>
       </div>
     </article>
     </div>
@@ -3837,6 +3837,59 @@ document.querySelectorAll('.recipe, .shop, .toc-table, .how').forEach(root => {
   while (walker.nextNode()) nodes.push(walker.currentNode);
   nodes.forEach(node => { node.nodeValue = normalizeEditorialText(node.nodeValue); });
 });
+const addSubstitutionNotes = () => {
+  document.querySelectorAll('.recipe').forEach(recipe => {
+    const body = recipe.querySelector('.recipe-body');
+    if (!body) return;
+    const text = body.textContent.toLowerCase();
+    if (text.includes('батат') && !body.querySelector('[data-substitution="batat"]')) {
+      const note = document.createElement('p');
+      note.className = 'note substitution-note';
+      note.dataset.substitution = 'batat';
+      note.textContent = 'Батат можно заменить картофелем в том же количестве.';
+      body.append(note);
+    }
+    if (text.includes('кинз') && !body.querySelector('[data-substitution="cilantro"]')) {
+      const note = document.createElement('p');
+      note.className = 'note substitution-note';
+      note.dataset.substitution = 'cilantro';
+      note.textContent = 'Кинзу можно заменить любой свежей зеленью.';
+      body.append(note);
+    }
+  });
+  document.querySelectorAll('.shop-cat span').forEach(span => {
+    const text = span.textContent;
+    if (/^батат —/i.test(text) && !/картоф/i.test(text)) {
+      span.textContent = `${text} (или картофель в том же количестве)`;
+    }
+    if (/^кинза —/i.test(text) && !/или/i.test(text)) {
+      span.textContent = `${text} (или любая свежая зелень)`;
+    }
+  });
+};
+addSubstitutionNotes();
+const d3Spinach = document.querySelector('#d3-breakfast .recipe-body ul li:nth-child(4)');
+if (d3Spinach) d3Spinach.textContent = 'шпинат свежий — 40 г';
+const d3EggStep = document.querySelector('#d3-breakfast .recipe-body ol li:nth-child(7)');
+if (d3EggStep) d3EggStep.textContent = 'Накрыть крышкой на 2 минуты — белок и желток должны полностью схватиться.';
+const d3BreakfastBody = document.querySelector('#d3-breakfast .recipe-body');
+if (d3BreakfastBody && !d3BreakfastBody.querySelector('[data-note="spinach-portion"]')) {
+  const note = document.createElement('p');
+  note.className = 'note';
+  note.dataset.note = 'spinach-portion';
+  note.textContent = 'Для двух порций можно взять около 75 г свежего шпината.';
+  d3BreakfastBody.append(note);
+}
+const d2PotatoBody = document.querySelector('#d2-dinner .recipe-body');
+if (d2PotatoBody && !d2PotatoBody.querySelector('[data-note="potato-timing"]')) {
+  const note = document.createElement('p');
+  note.className = 'note';
+  note.dataset.note = 'potato-timing';
+  note.textContent = 'Картофель можно сварить отдельно или добавить в кастрюлю к говядине за 25 минут до конца приготовления.';
+  d2PotatoBody.append(note);
+}
+const d29ChickenStep = document.querySelector('#d29-dinner .recipe-body ol li:nth-child(6)');
+if (d29ChickenStep) d29ChickenStep.textContent = 'Выложить курицу рядом с бататом, добавить раздавленный чеснок и тимьян.';
 const imageFixes = {
   'd9-dinner': 'img/dish-chickpea.jpg', 'd10-lunch': 'img/dish-chickpea.jpg',
   'd10-dinner': 'img/dish-chicken-cauliflower.jpg',

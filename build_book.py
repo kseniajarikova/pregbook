@@ -535,10 +535,111 @@ def apply_manual_overrides(weeks: list[dict]) -> None:
             cleaned.append(step)
         d20_dinner["steps"] = cleaned
 
+    d2_dinner = recipe(2, "Ужин")
+    if d2_dinner:
+        for section in d2_dinner["sections"]:
+            section["items"] = [
+                "говяжий бульон — 400 мл (или вода)"
+                if item.lower().startswith("говяжий бульон")
+                else item
+                for item in section["items"]
+            ]
+        broth_note = (
+            "Бульон можно взять готовый, заменить водой или сварить самостоятельно "
+            "из свежих овощей и зелени. После приготовления быстро остудить, "
+            "перелить в закрытую ёмкость и хранить в холодильнике при температуре "
+            "до 4 °C не более 3–4 дней; если не планируешь использовать его за это "
+            "время, заморозить."
+        )
+        if broth_note not in d2_dinner["notes"]:
+            d2_dinner["notes"].append(broth_note)
+        potato_note = (
+            "Картофель можно сварить отдельно или добавить в кастрюлю к говядине "
+            "за 25 минут до конца приготовления."
+        )
+        if potato_note not in d2_dinner["notes"]:
+            d2_dinner["notes"].append(potato_note)
+
+    d3_breakfast = recipe(3, "Завтрак")
+    if d3_breakfast:
+        for section in d3_breakfast["sections"]:
+            section["items"] = [
+                "шпинат свежий — 40 г" if item.lower().startswith("шпинат свежий") else item
+                for item in section["items"]
+            ]
+        d3_breakfast["steps"] = [
+            step.replace(
+                "желток должен полностью приготовиться",
+                "белок и желток должны полностью схватиться",
+            )
+            for step in d3_breakfast["steps"]
+        ]
+        note = "Для двух порций можно взять около 75 г свежего шпината."
+        if note not in d3_breakfast["notes"]:
+            d3_breakfast["notes"].append(note)
+
+    d29_dinner = recipe(29, "Ужин")
+    if d29_dinner:
+        d29_dinner["steps"] = [
+            step.replace("Выложить курицу к батату", "Выложить курицу рядом с бататом")
+            for step in d29_dinner["steps"]
+        ]
+
+    for week in weeks:
+        for day in week["days"]:
+            for r in day["recipes"]:
+                blob = " ".join(
+                    [r["title"]]
+                    + [item for section in r["sections"] for item in section["items"]]
+                    + r["steps"]
+                    + r["leftover"]
+                ).lower()
+                if "батат" in blob:
+                    for section in r["sections"]:
+                        section["items"] = [
+                            item + " (или картофель в том же количестве)"
+                            if item.lower().startswith("батат")
+                            and "картоф" not in item.lower()
+                            else item
+                            for item in section["items"]
+                        ]
+                    r["leftover"] = [
+                        item + " (или картофель в том же количестве)"
+                        if item.lower().startswith("батат") and "картоф" not in item.lower()
+                        else item
+                        for item in r["leftover"]
+                    ]
+                    for i, step in enumerate(r["steps"]):
+                        if "батат" in step.lower() and "картоф" not in step.lower():
+                            r["steps"][i] = re.sub(
+                                r"\bбатат\b",
+                                "батат (или картофель)",
+                                step,
+                                count=1,
+                                flags=re.IGNORECASE,
+                            )
+                            break
+                    note = "Батат можно заменить картофелем в том же количестве."
+                    if note not in r["notes"]:
+                        r["notes"].append(note)
+                if "кинз" in blob:
+                    note = "Кинзу можно заменить любой свежей зеленью."
+                    if note not in r["notes"]:
+                        r["notes"].append(note)
+
     for week in weeks:
         for cat in week["shop"]:
             cat["items"] = [
-                item.replace("и/ или", "и/или")
+                (
+                    item + " (или картофель в том же количестве)"
+                    if item.lower().startswith("батат") and "картоф" not in item.lower()
+                    else (
+                        item + " (или любая свежая зелень)"
+                        if item.lower().startswith("кинза —") and "или" not in item.lower()
+                        else item
+                    )
+                )
+                .replace("и/ или", "и/или")
                 .replace(" (или оливки / маринованный огурец). (или оливки / маринованный огурец)", " (или оливки / маринованный огурец)")
                 for item in cat["items"]
                 if "─────────────────────" not in item
