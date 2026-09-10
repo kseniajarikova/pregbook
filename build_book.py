@@ -691,7 +691,7 @@ def parse_all() -> list[dict]:
                     )
         for d in days:
             for r in d["recipes"]:
-                r["image"] = recipe_image(r["title"])
+                r["image"] = f"img/recipes/d{d['num']}-{r['slug']}.jpg"
                 note = safety_note(r)
                 if not r["time"]:
                     r["time"] = "10 минут" if r["is_leftover"] else "35 минут"
@@ -1398,24 +1398,9 @@ document.querySelectorAll('.recipe, .shop, .toc-table, .how').forEach(root => {
   while (walker.nextNode()) nodes.push(walker.currentNode);
   nodes.forEach(node => { node.nodeValue = normalizeEditorialText(node.nodeValue); });
 });
-const imageFixes = {
-  'd9-dinner': 'img/dish-chickpea.jpg', 'd10-lunch': 'img/dish-chickpea.jpg',
-  'd10-dinner': 'img/dish-chicken-cauliflower.jpg',
-  'd29-dinner': 'img/dish-chicken.jpg', 'd30-lunch': 'img/dish-chicken.jpg',
-  'd23-dinner': 'img/dish-lentil-soup.jpg', 'd24-lunch': 'img/dish-lentil-soup.jpg',
-  'd30-dinner': 'img/dish-sweet-potato-soup.jpg', 'd31-lunch': 'img/dish-sweet-potato-soup.jpg',
-  'd33-dinner': 'img/dish-chicken-noodle.jpg', 'd34-lunch': 'img/dish-chicken-noodle.jpg',
-  'd34-breakfast': 'img/dish-wholegrain-pancakes.jpg',
-  'd28-dinner': 'img/dish-steak-mash.jpg', 'd29-lunch': 'img/dish-steak-mash.jpg',
-  'd20-breakfast': 'img/dish-quinoa-porridge.jpg',
-  'd11-breakfast': 'img/dish-cottage-casserole.jpg', 'd31-breakfast': 'img/dish-cottage-casserole.jpg',
-  'd17-dinner': 'img/dish-turkey-bulgur.jpg', 'd18-lunch': 'img/dish-turkey-bulgur.jpg',
-  'd13-dinner': 'img/dish-chicken-curry.jpg', 'd14-lunch': 'img/dish-chicken-curry.jpg',
-  'd14-dinner': 'img/dish-egg-roasted-veg.jpg'
-};
-Object.entries(imageFixes).forEach(([id, src]) => {
-  const image = document.querySelector(`#${id} img`);
-  if (image) image.src = src;
+document.querySelectorAll('.recipe').forEach(recipe => {
+  const image = recipe.querySelector('img');
+  if (image) image.src = `img/recipes/${recipe.id}.jpg`;
 });
 const steakStep = document.querySelector('#d28-dinner .recipe-body ol li:nth-child(12)');
 if (steakStep) steakStep.textContent = 'Жарить стейк до безопасной внутренней температуры, согласованной с профильным редактором курса; проверить термометром. Формулировку про среднюю или желаемую прожарку для беременных не использовать до согласования.';
