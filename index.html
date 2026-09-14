@@ -396,6 +396,90 @@ a { color: inherit; }
   .week { break-before: page; }
   .recipe { break-inside: avoid; box-shadow: none; }
 }
+
+/* Первая неделя: тестовая мозаика с рецептом в модальном окне. */
+#week-1 .recipes-grid { gap: 0.85rem; }
+#week-1 .recipe {
+  position: relative; aspect-ratio: 1; min-height: 0; display: block; overflow: hidden;
+  background: #c98278; cursor: pointer; box-shadow: 0 12px 28px rgba(43, 35, 29, 0.1);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+#week-1 .recipe:hover, #week-1 .recipe:focus-visible {
+  transform: translateY(-3px); box-shadow: 0 18px 34px rgba(43, 35, 29, 0.18); outline: none;
+}
+#week-1 .recipe:focus-visible { box-shadow: 0 0 0 3px var(--cream-soft), 0 0 0 6px var(--terra-deep); }
+#week-1 .recipe-hero { position: absolute; inset: 0; display: block; min-height: 0; }
+#week-1 .recipe-photo { position: absolute; inset: 0; width: 100%; height: 100%; aspect-ratio: auto; }
+#week-1 .recipe-photo::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(24, 12, 10, 0.02) 20%, rgba(24, 12, 10, 0.8) 100%);
+}
+#week-1 .recipe-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform 260ms ease; }
+#week-1 .recipe:hover .recipe-photo img, #week-1 .recipe:focus-visible .recipe-photo img { transform: scale(1.04); }
+#week-1 .recipe-photo .badge-arc { z-index: 1; }
+#week-1 .recipe-head {
+  position: absolute; z-index: 2; inset: 0; display: flex; flex-direction: column;
+  justify-content: flex-end; align-items: flex-start; gap: 0.35rem; padding: 1rem;
+  background: linear-gradient(180deg, transparent 35%, rgba(24, 12, 10, 0.72) 100%);
+  color: var(--cream); pointer-events: none;
+}
+#week-1 .recipe-head .eyebrow { color: #ffe7df; }
+#week-1 .recipe-head h3 { font-size: clamp(1rem, 1.5vw, 1.35rem); line-height: 1.08; text-wrap: balance; }
+#week-1 .recipe-head::after {
+  content: "открыть рецепт"; margin-top: 0.1rem; padding: 0.32rem 0.58rem;
+  border: 1px solid rgba(255, 255, 255, 0.55); border-radius: var(--radius-pill);
+  background: rgba(55, 20, 20, 0.27); font-size: 0.62rem; font-weight: 700;
+  opacity: 0; transform: translateY(0.25rem); transition: opacity 180ms ease, transform 180ms ease;
+}
+#week-1 .recipe:hover .recipe-head::after, #week-1 .recipe:focus-visible .recipe-head::after {
+  opacity: 1; transform: translateY(0);
+}
+#week-1 .recipe-body { display: none; }
+
+.mosaic-recipe-modal {
+  position: fixed; z-index: 80; inset: 0; display: grid; place-items: center; padding: 1.2rem;
+  background: rgba(43, 25, 25, 0.56); opacity: 0; pointer-events: none; transition: opacity 180ms ease;
+}
+.mosaic-recipe-modal.is-open { opacity: 1; pointer-events: auto; }
+.mosaic-recipe-modal__dialog {
+  position: relative; width: min(850px, 100%); max-height: min(90vh, 900px); overflow: auto;
+  padding: 1.7rem; border: 1px solid rgba(255, 255, 255, 0.8); border-radius: 1rem;
+  background: var(--cream-soft); box-shadow: 0 22px 55px rgba(43, 35, 29, 0.25);
+  transform: translateY(0.5rem); transition: transform 180ms ease;
+}
+.mosaic-recipe-modal.is-open .mosaic-recipe-modal__dialog { transform: translateY(0); }
+.mosaic-recipe-modal__close {
+  position: sticky; z-index: 1; top: 0; float: right; width: 2.35rem; height: 2.35rem;
+  margin: -0.6rem -0.6rem 0 0.8rem; border: 0; border-radius: 50%;
+  background: rgba(217, 154, 155, 0.28); color: var(--terra-deep); cursor: pointer;
+  font-size: 1.4rem; line-height: 1;
+}
+.mosaic-recipe-modal .recipe-head { position: static; display: block; padding: 0; background: transparent; color: var(--ink); }
+.mosaic-recipe-modal .recipe-head .eyebrow { color: var(--terra-deep); }
+.mosaic-recipe-modal .recipe-head h3 {
+  max-width: 42rem; margin-top: 0.35rem; font-size: clamp(1.35rem, 3vw, 2.2rem); line-height: 1.08;
+}
+.mosaic-recipe-modal .recipe-head::after { display: none; }
+.mosaic-recipe-modal .pills { margin-top: 0.65rem; }
+.mosaic-recipe-modal .pill { border-color: var(--terra-deep); color: var(--terra-deep); }
+.mosaic-recipe-modal .recipe-body {
+  display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 1.2rem 1.7rem; margin-top: 1.35rem; padding: 1.2rem 0 0; border-top: 1px solid var(--line);
+}
+.mosaic-recipe-modal .recipe-body h4 { color: var(--terra-deep); }
+.mosaic-recipe-modal .recipe-body .note, .mosaic-recipe-modal .recipe-body .swap-popover { grid-column: 1 / -1; }
+.mosaic-recipe-modal .swap-popover { margin-top: 0.1rem; }
+@media (max-width: 980px) { #week-1 .recipes-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) {
+  #week-1 .recipes-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #week-1 .recipe-head { padding: 0.75rem; }
+  #week-1 .recipe-head h3 { font-size: 0.9rem; }
+  #week-1 .recipe-head::after { display: none; }
+  .mosaic-recipe-modal__dialog { padding: 1.2rem; }
+  .mosaic-recipe-modal .recipe-body { grid-template-columns: 1fr; }
+}
+@media (max-width: 400px) { #week-1 .recipes-grid { grid-template-columns: 1fr; } }
+
 </style>
 </head>
 <body>
@@ -3971,6 +4055,79 @@ const topButton = document.querySelector('.back-to-top');
 const updateTopButton = () => topButton.classList.toggle('is-visible', window.scrollY > 450);
 window.addEventListener('scroll', updateTopButton, { passive: true });
 updateTopButton();
+
+const installWeekOneMosaic = () => {
+  const week = document.querySelector('#week-1');
+  if (!week || document.querySelector('.mosaic-recipe-modal')) return;
+  const modal = document.createElement('div');
+  modal.className = 'mosaic-recipe-modal';
+  modal.setAttribute('aria-hidden', 'true');
+  modal.innerHTML = '<div class="mosaic-recipe-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="mosaic-modal-title"><button class="mosaic-recipe-modal__close" type="button" aria-label="Закрыть рецепт">×</button><div class="mosaic-recipe-modal__content"></div></div>';
+  document.body.append(modal);
+  const dialog = modal.querySelector('.mosaic-recipe-modal__dialog');
+  const content = modal.querySelector('.mosaic-recipe-modal__content');
+  const closeButton = modal.querySelector('.mosaic-recipe-modal__close');
+  let returnFocus = null;
+  const close = () => {
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    returnFocus?.focus();
+  };
+  const wireModalSwaps = () => {
+    content.querySelectorAll('.swap-trigger').forEach(trigger => {
+      trigger.addEventListener('click', event => {
+        event.stopPropagation();
+        const popover = trigger.closest('.swap-popover');
+        const open = popover.classList.toggle('is-open');
+        trigger.setAttribute('aria-expanded', String(open));
+        popover.querySelector('.swap-panel')?.setAttribute('aria-hidden', String(!open));
+      });
+    });
+  };
+  const open = recipe => {
+    const head = recipe.querySelector('.recipe-head')?.cloneNode(true);
+    const body = recipe.querySelector('.recipe-body')?.cloneNode(true);
+    if (!head || !body) return;
+    content.replaceChildren(head, body);
+    const title = head.querySelector('h3')?.textContent.trim() || 'Рецепт';
+    const titleNode = document.createElement('h2');
+    titleNode.id = 'mosaic-modal-title';
+    titleNode.textContent = title;
+    titleNode.className = 'sr-only';
+    head.setAttribute('aria-hidden', 'true');
+    dialog.setAttribute('aria-label', title);
+    content.prepend(titleNode);
+    wireModalSwaps();
+    returnFocus = document.activeElement;
+    modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    closeButton.focus();
+  };
+  week.querySelectorAll('.day .recipe').forEach(recipe => {
+    const title = recipe.querySelector('.recipe-head h3')?.textContent.trim() || 'Открыть рецепт';
+    recipe.setAttribute('tabindex', '0');
+    recipe.setAttribute('role', 'button');
+    recipe.setAttribute('aria-label', 'Открыть рецепт: ' + title);
+    recipe.addEventListener('click', event => {
+      if (event.target.closest('a, button')) return;
+      open(recipe);
+    });
+    recipe.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        open(recipe);
+      }
+    });
+  });
+  closeButton.addEventListener('click', close);
+  modal.addEventListener('click', event => { if (event.target === modal) close(); });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && modal.classList.contains('is-open')) close();
+  });
+};
+installWeekOneMosaic();
 </script>
 </body>
 </html>
