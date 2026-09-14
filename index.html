@@ -4158,6 +4158,18 @@ const installMosaicForWeeks = () => {
         popover.querySelector('.swap-panel')?.setAttribute('aria-hidden', String(!open));
       });
     });
+    content.querySelectorAll('.prep-link').forEach(link => {
+      link.addEventListener('click', event => {
+        event.preventDefault();
+        const href = link.getAttribute('href');
+        const target = href ? document.querySelector(href) : null;
+        close();
+        if (target) {
+          history.replaceState(null, '', href);
+          requestAnimationFrame(() => target.scrollIntoView({ behavior: 'smooth', block: 'center' }));
+        }
+      });
+    });
   };
   const open = recipe => {
     const head = recipe.querySelector('.recipe-head')?.cloneNode(true);
