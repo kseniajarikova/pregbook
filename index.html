@@ -287,8 +287,24 @@ a { color: inherit; }
 }
 .recipe-body .prep-link:hover { color: var(--ink); text-decoration-style: solid; }
 .ing-sub { font-size: 0.64rem; font-weight: 600; margin: 0.35rem 0 0.2rem; color: var(--ink); }
-.swap-note { margin-top: 0.1rem; padding: 0.55rem 0.65rem; border-left: 3px solid var(--terra); background: rgba(217, 154, 155, 0.14); color: var(--ink-soft); font-size: 0.67rem; line-height: 1.4; }
-.swap-note strong { color: var(--ink); font-weight: 700; }
+.swap-popover { position: relative; grid-column: 1 / -1; margin-top: 0.1rem; }
+.swap-trigger {
+  appearance: none; border: 1px solid rgba(198, 102, 69, 0.45); border-radius: 999px;
+  background: rgba(217, 154, 155, 0.16); color: var(--terra-deep); cursor: pointer;
+  padding: 0.28rem 0.6rem; font: inherit; font-size: 0.65rem; font-weight: 700;
+}
+.swap-trigger:hover, .swap-trigger:focus-visible, .swap-popover.is-open .swap-trigger { background: rgba(217, 154, 155, 0.32); outline: none; }
+.swap-panel {
+  position: absolute; left: 0; bottom: calc(100% + 0.45rem); z-index: 20;
+  width: min(31rem, calc(100vw - 2rem)); padding: 0.65rem 0.75rem;
+  border: 1px solid rgba(198, 102, 69, 0.35); border-radius: 0.65rem;
+  background: #fffaf7; color: var(--ink-soft); box-shadow: 0 12px 28px rgba(43, 35, 29, 0.16);
+  font-size: 0.67rem; line-height: 1.45; opacity: 0; pointer-events: none; transform: translateY(0.25rem);
+  transition: opacity 140ms ease, transform 140ms ease;
+}
+.swap-panel::after { content: ""; position: absolute; left: 1.1rem; bottom: -0.4rem; width: 0.7rem; height: 0.7rem; background: #fffaf7; border-right: 1px solid rgba(198, 102, 69, 0.35); border-bottom: 1px solid rgba(198, 102, 69, 0.35); transform: rotate(45deg); }
+.swap-popover:hover .swap-panel, .swap-popover:focus-within .swap-panel, .swap-popover.is-open .swap-panel { opacity: 1; pointer-events: auto; transform: translateY(0); }
+.swap-panel strong { color: var(--ink); font-weight: 700; }
 .note {
   grid-column: 1 / -1;
   margin-top: 0.15rem; padding: 0.5rem 0.65rem;
@@ -1782,7 +1798,7 @@ a { color: inherit; }
             </tr><tr>
               <th><a href="#d18"><span class="dow">чт</span>
               <span class="dnum">день 18</span></a></th>
-              <td><a href="#d18-breakfast">Овсянка с ягодами, йогуртом и тахини</a></td><td><a href="#d18-lunch">Индейка с кабачком, перцем и булгуром</a></td><td><a href="#d18-dinner">Треска в томатах с оливками, каперсами и бурым рисом</a></td>
+              <td><a href="#d18-breakfast">Овсянка с ягодами, йогуртом и тахини</a></td><td><a href="#d18-lunch">Индейка тушёная с кабачком, перцем и булгуром</a></td><td><a href="#d18-dinner">Треска в томатах с оливками, каперсами и бурым рисом</a></td>
             </tr><tr>
               <th><a href="#d19"><span class="dow">пт</span>
               <span class="dnum">день 19</span></a></th>
@@ -1790,7 +1806,7 @@ a { color: inherit; }
             </tr><tr>
               <th><a href="#d20"><span class="dow">сб</span>
               <span class="dnum">день 20</span></a></th>
-              <td><a href="#d20-breakfast">Киноа-каша с бананом, орехами и корицей</a></td><td><a href="#d20-lunch">Говядина с черносливом, зелёный салат с руколой</a></td><td><a href="#d20-dinner">Куриные бёдра с чесноком, розмарином и пюре из цветной капусты</a></td>
+              <td><a href="#d20-breakfast">Киноа-каша с бананом, орехами и корицей</a></td><td><a href="#d20-lunch">Говядина, тушёная с томатами, чесноком и розмарином, киноа</a></td><td><a href="#d20-dinner">Куриные бёдра с чесноком, розмарином и пюре из цветной капусты</a></td>
             </tr><tr>
               <th><a href="#d21"><span class="dow">вс</span>
               <span class="dnum">день 21</span></a></th>
@@ -2093,7 +2109,7 @@ a { color: inherit; }
     <div class="swap-note"><strong>Если нет тахини:</strong> подойдёт арахисовая паста без сахара, натуральный йогурт или просто оливковое масло с лимонным соком.</div>
     </article>
     
-    <article class="recipe leftover" id="d18-lunch" data-name="индейка с кабачком, перцем и булгуром">
+    <article class="recipe leftover" id="d18-lunch" data-name="индейка тушёная с кабачком, перцем и булгуром">
       <div class="recipe-hero">
         <figure class="recipe-photo">
           <div class="badge-arc"><span>#sekta</span></div>
@@ -2101,7 +2117,7 @@ a { color: inherit; }
         </figure>
         <div class="recipe-head">
           <p class="eyebrow">обед</p>
-          <h3>индейка с кабачком, перцем и булгуром</h3>
+          <h3>индейка тушёная с кабачком, перцем и булгуром</h3>
           <div class="pills"><span class="pill">10 минут</span><span class="pill leftover">из заготовки</span></div>
         </div>
       </div>
@@ -2223,7 +2239,7 @@ a { color: inherit; }
           <h4>Приготовление</h4>
           <ol><li>Говядину нарезать крупными кусками, обсушить бумажным полотенцем. Посолить, поперчить.</li><li>В кастрюле с толстым дном разогреть масло. Обжарить мясо порциями до румяной корочки со всех сторон. Переложить на тарелку.</li><li>В той же кастрюле обжарить мелко нарезанные лук, морковь и сельдерей 5–7 минут — до мягкости.</li><li>Добавить измельчённый чеснок и томатную пасту, прогреть 1 минуту.</li><li>Влить бульон, добавить томаты в собственном соку (размять их ложкой), розмарин. Довести до кипения.</li><li>Вернуть мясо в соус. Накрыть крышкой и тушить на минимальном огне 1 час 15 минут — до мягкости говядины.</li><li>За 20 минут до готовности мяса поставить вариться киноа. Промыть 100 г киноа, залить 200 мл кипятка, варить на слабом огне 15 минут. Дать постоять 5 минут под крышкой.</li><li>Перед подачей посыпать рубленой зеленью (петрушкой или базиликом — по желанию).</li></ol>
         </div>
-        <p class="note leftover-note"><strong>На завтра:</strong> Отложить для завтрашнего обеда · говядина с травами — 200 г · киноа — 100 г</p>
+        <p class="note leftover-note"><strong>На завтра:</strong> Отложить для завтрашнего обеда · говядина, тушёная с томатами, чесноком и розмарином — 200 г · киноа — 100 г</p>
       </div>
     </article>
     </div>
@@ -2260,7 +2276,7 @@ a { color: inherit; }
       </div>
     </article>
     
-    <article class="recipe leftover" id="d20-lunch" data-name="говядина с травами и киноа">
+    <article class="recipe leftover" id="d20-lunch" data-name="говядина, тушёная с томатами, чесноком и розмарином, киноа">
       <div class="recipe-hero">
         <figure class="recipe-photo">
           <div class="badge-arc"><span>#sekta</span></div>
@@ -2268,14 +2284,14 @@ a { color: inherit; }
         </figure>
         <div class="recipe-head">
           <p class="eyebrow">обед</p>
-          <h3>говядина с травами и киноа</h3>
+          <h3>говядина, тушёная с томатами, чесноком и розмарином, киноа</h3>
           <div class="pills"><span class="pill">10 минут</span><span class="pill leftover">из заготовки</span></div>
         </div>
       </div>
       <div class="recipe-body">
         <div>
           <h4>Ингредиенты</h4>
-          <ul><li><a class="prep-link" href="#d19-dinner">говядина с травами</a> (готовили в дне 19) — 200 г</li><li><a class="prep-link" href="#d19-dinner">киноа</a> (готовили в дне 19) — 100 г</li></ul><p class="ing-sub">Для салата</p><ul><li>рукола — 60 г</li><li>огурец — ½ шт</li><li>оливковое масло — 1 ст. л</li><li>лимонный сок — 1 ч. л</li><li>соль — щепотка</li></ul>
+          <ul><li><a class="prep-link" href="#d19-dinner">говядина, тушёная с томатами, чесноком и розмарином</a> (готовили в дне 19) — 200 г</li><li><a class="prep-link" href="#d19-dinner">киноа</a> (готовили в дне 19) — 100 г</li></ul><p class="ing-sub">Для салата</p><ul><li>рукола — 60 г</li><li>огурец — ½ шт</li><li>оливковое масло — 1 ст. л</li><li>лимонный сок — 1 ч. л</li><li>соль — щепотка</li></ul>
         </div>
         <div>
           <h4>Приготовление</h4>
@@ -3837,6 +3853,45 @@ document.querySelectorAll('.recipe, .shop, .toc-table, .how').forEach(root => {
   while (walker.nextNode()) nodes.push(walker.currentNode);
   nodes.forEach(node => { node.nodeValue = normalizeEditorialText(node.nodeValue); });
 });
+const makeSubstitutionPopovers = () => {
+  document.querySelectorAll('.swap-note, .substitution-note').forEach(note => {
+    const recipeBody = note.closest('.recipe')?.querySelector('.recipe-body');
+    if (!recipeBody) return;
+    const popover = document.createElement('div');
+    popover.className = 'swap-popover';
+    const trigger = document.createElement('button');
+    trigger.type = 'button';
+    trigger.className = 'swap-trigger';
+    trigger.textContent = '↻ замены';
+    trigger.setAttribute('aria-expanded', 'false');
+    const panel = document.createElement('div');
+    panel.className = 'swap-panel';
+    panel.setAttribute('role', 'tooltip');
+    panel.setAttribute('aria-hidden', 'true');
+    panel.innerHTML = note.innerHTML;
+    popover.append(trigger, panel);
+    recipeBody.append(popover);
+    note.remove();
+    const close = () => {
+      popover.classList.remove('is-open');
+      trigger.setAttribute('aria-expanded', 'false');
+      panel.setAttribute('aria-hidden', 'true');
+    };
+    trigger.addEventListener('click', event => {
+      event.stopPropagation();
+      const open = popover.classList.toggle('is-open');
+      trigger.setAttribute('aria-expanded', String(open));
+      panel.setAttribute('aria-hidden', String(!open));
+    });
+    document.addEventListener('click', event => {
+      if (!popover.contains(event.target)) close();
+    });
+    popover.addEventListener('keydown', event => {
+      if (event.key === 'Escape') { close(); trigger.focus(); }
+    });
+  });
+};
+makeSubstitutionPopovers();
 const addSubstitutionNotes = () => {
   document.querySelectorAll('.recipe').forEach(recipe => {
     const body = recipe.querySelector('.recipe-body');
@@ -3868,6 +3923,7 @@ const addSubstitutionNotes = () => {
   });
 };
 addSubstitutionNotes();
+makeSubstitutionPopovers();
 const d3Spinach = document.querySelector('#d3-breakfast .recipe-body ul li:nth-child(4)');
 if (d3Spinach) d3Spinach.textContent = 'шпинат свежий — 40 г';
 const d3EggStep = document.querySelector('#d3-breakfast .recipe-body ol li:nth-child(7)');
