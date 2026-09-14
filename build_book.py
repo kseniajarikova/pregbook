@@ -466,6 +466,9 @@ def apply_manual_overrides(weeks: list[dict]) -> None:
     d19_lunch = recipe(19, "Обед")
     if d19_lunch:
         d19_lunch["title"] = d19_lunch["title"].replace("картофелем", "бурым рисом")
+    d18_lunch = recipe(18, "Обед")
+    if d18_lunch:
+        d18_lunch["title"] = "индейка тушёная с кабачком, перцем и булгуром"
     d19_dinner = recipe(19, "Ужин")
     if d19_dinner and "киноа" not in d19_dinner["title"].lower():
         d19_dinner["title"] += ", киноа"
@@ -474,8 +477,13 @@ def apply_manual_overrides(weeks: list[dict]) -> None:
             s.replace("150 г киноа", "100 г киноа").replace("300 мл кипятка", "200 мл кипятка")
             for s in d19_dinner["steps"]
         ]
+        d19_dinner["leftover"] = [
+            "говядина, тушёная с томатами, чесноком и розмарином — 200 г",
+            "киноа — 100 г",
+        ]
     d20_lunch = recipe(20, "Обед")
     if d20_lunch:
+        d20_lunch["title"] = "говядина, тушёная с томатами, чесноком и розмарином, киноа"
         d20_lunch["steps"] = [s.replace("Картофель", "Киноа") for s in d20_lunch["steps"]]
     d35_dinner = recipe(35, "Ужин")
     if d35_dinner:
@@ -499,10 +507,13 @@ def apply_manual_overrides(weeks: list[dict]) -> None:
     for week in weeks:
         for toc in week["toc"]:
             if toc["num"] == 18 and len(toc["meals"]) >= 3:
+                toc["meals"][1] = "Индейка тушёная с кабачком, перцем и булгуром"
                 toc["meals"][2] = "Треска в томатах с оливками, каперсами и бурым рисом"
             elif toc["num"] == 19 and len(toc["meals"]) >= 3:
                 toc["meals"][1] = "Треска с томатами и бурым рисом, салат из капусты с яблоком"
                 toc["meals"][2] = "Говядина, тушёная с томатами, чесноком и розмарином, киноа"
+            elif toc["num"] == 20 and len(toc["meals"]) >= 2:
+                toc["meals"][1] = "Говядина, тушёная с томатами, чесноком и розмарином, киноа"
             elif toc["num"] == 14 and len(toc["meals"]) >= 2:
                 toc["meals"][1] = "Курица с цветной капустой, салат со свёклой"
 
