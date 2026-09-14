@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Неделя 1 · День 1 — мозаика рецептов</title>
+  <meta name="description" content="Тестовая мозаика рецептов первого дня меню для беременных." />
+  <style>
+    :root {
+      --ink: #3d2525;
+      --muted: #80686a;
+      --paper: #fffaf8;
+      --rose: #f7d8d8;
+      --coral: #dc796f;
+      --coral-dark: #9c4f4c;
+      --line: rgba(126, 74, 73, .18);
+      --shadow: 0 22px 55px rgba(110, 65, 64, .16);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 0%, rgba(255, 224, 217, .88), transparent 34rem),
+        linear-gradient(135deg, #fffaf7 0%, #fdf1ef 52%, #fff9f3 100%);
+      font: 16px/1.55 Georgia, "Times New Roman", serif;
+    }
+
+    button { font: inherit; }
+
+    .page {
+      width: min(1180px, calc(100% - 48px));
+      margin: 0 auto;
+      padding: 44px 0 72px;
+    }
+
+    .intro {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 28px;
+      margin-bottom: 26px;
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--coral-dark);
+      font: 700 12px/1.2 Arial, sans-serif;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 690px;
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.55rem);
+      line-height: .98;
+      letter-spacing: -.04em;
+    }
+
+    .intro-note {
+      max-width: 300px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .mosaic {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .mosaic-card {
+      position: relative;
+      aspect-ratio: 1;
+      min-height: 240px;
+      padding: 0;
+      overflow: hidden;
+      color: #fff;
+      text-align: left;
+      border: 0;
+      border-radius: 24px;
+      background: #c98278;
+      box-shadow: 0 13px 30px rgba(110, 65, 64, .16);
+      cursor: pointer;
+      isolation: isolate;
+      transition: transform .24s ease, box-shadow .24s ease;
+    }
+
+    .mosaic-card::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(20, 9, 9, .02) 20%, rgba(20, 9, 9, .8) 100%);
+    }
+
+    .mosaic-card:hover,
+    .mosaic-card:focus-visible {
+      transform: translateY(-5px);
+      box-shadow: 0 22px 42px rgba(110, 65, 64, .25);
+      outline: none;
+    }
+
+    .mosaic-card:focus-visible { box-shadow: 0 0 0 4px #fff, 0 0 0 7px var(--coral); }
+
+    .mosaic-card img {
+      position: absolute;
+      z-index: -2;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform .35s ease;
+    }
+
+    .mosaic-card:hover img,
+    .mosaic-card:focus-visible img { transform: scale(1.045); }
+
+    .card-copy {
+      position: absolute;
+      inset: auto 18px 18px;
+    }
+
+    .meal {
+      margin: 0 0 7px;
+      color: #ffe7df;
+      font: 700 12px/1.2 Arial, sans-serif;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .card-title {
+      max-width: 95%;
+      margin: 0;
+      font-size: clamp(1.16rem, 1.8vw, 1.58rem);
+      line-height: 1.05;
+      text-wrap: balance;
+    }
+
+    .card-action {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      padding: 7px 10px;
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, .55);
+      border-radius: 999px;
+      background: rgba(55, 20, 20, .27);
+      font: 700 12px/1 Arial, sans-serif;
+      opacity: 0;
+      transform: translateY(-4px);
+      transition: opacity .2s ease, transform .2s ease;
+    }
+
+    .mosaic-card:hover .card-action,
+    .mosaic-card:focus-visible .card-action { opacity: 1; transform: translateY(0); }
+
+    .hint {
+      margin: 18px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .modal {
+      position: fixed;
+      z-index: 10;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 22px;
+      background: rgba(52, 25, 26, .54);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s ease;
+    }
+
+    .modal.is-open { opacity: 1; pointer-events: auto; }
+
+    .modal-dialog {
+      position: relative;
+      width: min(850px, 100%);
+      max-height: min(90vh, 900px);
+      overflow: auto;
+      padding: 32px;
+      border: 1px solid rgba(255, 255, 255, .8);
+      border-radius: 25px;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+      transform: translateY(10px);
+      transition: transform .2s ease;
+    }
+
+    .modal.is-open .modal-dialog { transform: translateY(0); }
+
+    .close {
+      position: sticky;
+      z-index: 1;
+      top: 0;
+      float: right;
+      width: 38px;
+      height: 38px;
+      margin: -16px -16px 0 12px;
+      border: 0;
+      border-radius: 50%;
+      color: var(--coral-dark);
+      background: #f5d8d5;
+      cursor: pointer;
+      font-size: 23px;
+      line-height: 1;
+    }
+
+    .modal-eyebrow {
+      margin: 4px 0 10px;
+      color: var(--coral-dark);
+      font: 700 12px/1.2 Arial, sans-serif;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+
+    .modal-title {
+      max-width: 680px;
+      margin: 0;
+      font-size: clamp(1.8rem, 4vw, 2.9rem);
+      line-height: 1.02;
+    }
+
+    .duration {
+      display: inline-block;
+      margin-top: 14px;
+      padding: 7px 11px;
+      border-radius: 999px;
+      color: var(--coral-dark);
+      background: var(--rose);
+      font: 700 13px/1 Arial, sans-serif;
+    }
+
+    .recipe-body {
+      display: grid;
+      grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+      gap: 26px;
+      margin-top: 28px;
+      padding-top: 24px;
+      border-top: 1px solid var(--line);
+    }
+
+    .recipe-body h4 {
+      margin: 0 0 10px;
+      color: var(--coral-dark);
+      font: 700 13px/1.2 Arial, sans-serif;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+
+    .recipe-body ul,
+    .recipe-body ol { margin: 0; padding-left: 22px; }
+    .recipe-body li + li { margin-top: 7px; }
+
+    .recipe-body .note,
+    .swap-note {
+      grid-column: 1 / -1;
+      margin: 0;
+      padding: 14px 16px;
+      border-left: 3px solid var(--coral);
+      border-radius: 0 12px 12px 0;
+      background: #fff0eb;
+    }
+
+    @media (max-width: 760px) {
+      .page { width: min(100% - 28px, 620px); padding-top: 28px; }
+      .intro { display: block; }
+      .intro-note { max-width: 520px; margin-top: 14px; }
+      .mosaic { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+      .mosaic-card { min-height: 160px; border-radius: 17px; }
+      .card-copy { inset: auto 13px 13px; }
+      .card-title { font-size: 1.1rem; }
+      .card-action { display: none; }
+      .modal-dialog { padding: 24px 20px; }
+      .recipe-body { grid-template-columns: 1fr; gap: 20px; }
+    }
+
+    @media (max-width: 430px) {
+      .mosaic { grid-template-columns: 1fr; }
+      .mosaic-card { min-height: 245px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="intro" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow">тест механики · меню беременных</p>
+        <h1 id="page-title">Неделя 1 · День 1</h1>
+      </div>
+      <p class="intro-note">Квадратная мозаика оставляет на экране только образ блюда и название. Полный рецепт открывается поверх страницы.</p>
+    </section>
+
+    <section id="mosaic" class="mosaic" aria-label="Рецепты первого дня"></section>
+    <p class="hint">Наведите курсор или нажмите на карточку, чтобы открыть полный рецепт.</p>
+  </main>
+
+  <div id="modal" class="modal" aria-hidden="true">
+    <article class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <button class="close" type="button" aria-label="Закрыть рецепт">×</button>
+      <div id="modal-content"></div>
+    </article>
+  </div>
+
+  <script>
+    const mosaic = document.querySelector('#mosaic');
+    const modal = document.querySelector('#modal');
+    const modalContent = document.querySelector('#modal-content');
+    const closeButton = document.querySelector('.close');
+
+    function imageFor(id) {
+      return `img/recipes/${id}.jpg`;
+    }
+
+    function showRecipe(recipe) {
+      const source = recipe.cloneNode(true);
+      const id = source.id;
+      const title = source.querySelector('.recipe-head h3')?.textContent.trim() || '';
+      const meal = source.querySelector('.recipe-head .eyebrow')?.textContent.trim() || '';
+      const duration = source.querySelector('.pill')?.textContent.trim() || '';
+      const body = source.querySelector('.recipe-body');
+      const swap = source.querySelector('.swap-note');
+      if (!body) return;
+
+      const bodyCopy = body.cloneNode(true);
+      if (swap) bodyCopy.appendChild(swap.cloneNode(true));
+      modalContent.replaceChildren();
+
+      const eyebrow = document.createElement('p');
+      eyebrow.className = 'modal-eyebrow';
+      eyebrow.textContent = meal;
+      const heading = document.createElement('h2');
+      heading.className = 'modal-title';
+      heading.id = 'modal-title';
+      heading.textContent = title;
+      modalContent.append(eyebrow, heading);
+      if (duration) {
+        const time = document.createElement('span');
+        time.className = 'duration';
+        time.textContent = duration;
+        modalContent.append(time);
+      }
+      modalContent.append(bodyCopy);
+      modal.classList.add('is-open');
+      modal.setAttribute('aria-hidden', 'false');
+      closeButton.focus();
+      history.replaceState(null, '', `#${id}`);
+    }
+
+    function closeRecipe() {
+      modal.classList.remove('is-open');
+      modal.setAttribute('aria-hidden', 'true');
+      if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+    }
+
+    function render(sourceDocument) {
+      const day = sourceDocument.querySelector('#d1');
+      if (!day) throw new Error('День 1 не найден');
+      const recipes = [...day.querySelectorAll('.recipe')].slice(0, 3);
+      recipes.forEach((recipe) => {
+        const id = recipe.id;
+        const title = recipe.querySelector('.recipe-head h3')?.textContent.trim() || recipe.dataset.name || '';
+        const meal = recipe.querySelector('.recipe-head .eyebrow')?.textContent.trim() || '';
+        const card = document.createElement('button');
+        card.className = 'mosaic-card';
+        card.type = 'button';
+        card.setAttribute('aria-label', `Открыть рецепт: ${title}`);
+
+        const image = document.createElement('img');
+        image.src = imageFor(id);
+        image.alt = title;
+        image.loading = 'lazy';
+        const action = document.createElement('span');
+        action.className = 'card-action';
+        action.textContent = 'открыть рецепт';
+        const copy = document.createElement('span');
+        copy.className = 'card-copy';
+        const mealLabel = document.createElement('span');
+        mealLabel.className = 'meal';
+        mealLabel.textContent = meal;
+        const heading = document.createElement('span');
+        heading.className = 'card-title';
+        heading.textContent = title;
+        copy.append(mealLabel, heading);
+        card.append(image, action, copy);
+        card.addEventListener('click', () => showRecipe(recipe));
+        mosaic.appendChild(card);
+      });
+    }
+
+    closeButton.addEventListener('click', closeRecipe);
+    modal.addEventListener('click', (event) => {
+      if (event.target === modal) closeRecipe();
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && modal.classList.contains('is-open')) closeRecipe();
+    });
+
+    fetch('index.html')
+      .then((response) => {
+        if (!response.ok) throw new Error(`Не удалось загрузить меню: ${response.status}`);
+        return response.text();
+      })
+      .then((html) => render(new DOMParser().parseFromString(html, 'text/html')))
+      .catch((error) => {
+        mosaic.innerHTML = `<p role="alert">Не удалось загрузить рецепты. ${error.message}</p>`;
+      });
+  </script>
+</body>
+</html>
