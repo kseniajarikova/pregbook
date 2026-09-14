@@ -476,18 +476,65 @@ a { color: inherit; }
 }
 @media (max-width: 560px) {
   #week-1 .recipes-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.45rem; }
-  #week-1 .recipe-head { padding: 0.55rem; }
-  #week-1 .recipe-head .eyebrow { font-size: 0.5rem; }
-  #week-1 .recipe-head h3 { font-size: clamp(0.62rem, 2.9vw, 0.78rem); line-height: 1.08; }
+  #week-1 .recipe {
+    aspect-ratio: auto;
+    display: block;
+    background: #fff;
+    border-radius: 8px;
+  }
+  #week-1 .recipe-hero {
+    position: static;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+  #week-1 .recipe-photo {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    flex: none;
+  }
+  #week-1 .recipe-photo::after { display: none; }
+  #week-1 .recipe-head {
+    position: static;
+    inset: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 0.2rem;
+    min-height: 4.2rem;
+    padding: 0.45rem 0.45rem 0.55rem;
+    background: var(--cream);
+    color: var(--ink);
+    pointer-events: none;
+  }
+  #week-1 .recipe-head .eyebrow { color: var(--terra-deep); font-size: 0.48rem; }
+  #week-1 .recipe-head h3 {
+    color: var(--ink);
+    font-size: clamp(0.62rem, 2.9vw, 0.78rem);
+    line-height: 1.12;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+  }
   #week-1 .recipe-head::after { display: none; }
   #week-1 .pills { gap: 0.12rem; }
-  #week-1 .pill { padding: 0.12rem 0.28rem; font-size: 0.48rem; }
+  #week-1 .pill {
+    padding: 0.12rem 0.28rem;
+    border-color: var(--terra-deep);
+    color: var(--terra-deep);
+    font-size: 0.48rem;
+  }
   .mosaic-recipe-modal__dialog { padding: 1.2rem; }
   .mosaic-recipe-modal .recipe-body { grid-template-columns: 1fr; }
 }
 @media (max-width: 400px) {
   #week-1 .recipes-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.35rem; }
-  #week-1 .recipe-head { padding: 0.45rem; }
+  #week-1 .recipe-head { min-height: 3.9rem; padding: 0.4rem 0.38rem 0.48rem; }
   #week-1 .recipe-head h3 { font-size: 0.62rem; }
 }
 
