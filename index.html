@@ -397,44 +397,44 @@ a { color: inherit; }
   .recipe { break-inside: avoid; box-shadow: none; }
 }
 
-/* Первая неделя: тестовая мозаика с рецептом в модальном окне. */
-#week-1 .recipes-grid { gap: 0.85rem; }
-#week-1 .recipe {
+/* Мозаика рецептов для всех пяти недель. */
+.week .recipes-grid { gap: 0.85rem; }
+.week .recipe {
   position: relative; aspect-ratio: 1; min-height: 0; display: block; overflow: hidden;
   background: #c98278; cursor: pointer; box-shadow: 0 12px 28px rgba(43, 35, 29, 0.1);
   transition: transform 180ms ease, box-shadow 180ms ease;
 }
-#week-1 .recipe:hover, #week-1 .recipe:focus-visible {
+.week .recipe:hover, .week .recipe:focus-visible {
   transform: translateY(-3px); box-shadow: 0 18px 34px rgba(43, 35, 29, 0.18); outline: none;
 }
-#week-1 .recipe:focus-visible { box-shadow: 0 0 0 3px var(--cream-soft), 0 0 0 6px var(--terra-deep); }
-#week-1 .recipe-hero { position: absolute; inset: 0; display: block; min-height: 0; }
-#week-1 .recipe-photo { position: absolute; inset: 0; width: 100%; height: 100%; aspect-ratio: auto; }
-#week-1 .recipe-photo::after {
+.week .recipe:focus-visible { box-shadow: 0 0 0 3px var(--cream-soft), 0 0 0 6px var(--terra-deep); }
+.week .recipe-hero { position: absolute; inset: 0; display: block; min-height: 0; }
+.week .recipe-photo { position: absolute; inset: 0; width: 100%; height: 100%; aspect-ratio: auto; }
+.week .recipe-photo::after {
   content: ""; position: absolute; inset: 0;
   background: linear-gradient(180deg, rgba(24, 12, 10, 0.02) 20%, rgba(24, 12, 10, 0.8) 100%);
 }
-#week-1 .recipe-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform 260ms ease; }
-#week-1 .recipe:hover .recipe-photo img, #week-1 .recipe:focus-visible .recipe-photo img { transform: scale(1.04); }
-#week-1 .recipe-photo .badge-arc { z-index: 1; }
-#week-1 .recipe-head {
+.week .recipe-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform 260ms ease; }
+.week .recipe:hover .recipe-photo img, .week .recipe:focus-visible .recipe-photo img { transform: scale(1.04); }
+.week .recipe-photo .badge-arc { z-index: 1; }
+.week .recipe-head {
   position: absolute; z-index: 2; inset: 0; display: flex; flex-direction: column;
   justify-content: flex-end; align-items: flex-start; gap: 0.35rem; padding: 1rem;
   background: linear-gradient(180deg, transparent 35%, rgba(24, 12, 10, 0.72) 100%);
   color: var(--cream); pointer-events: none;
 }
-#week-1 .recipe-head .eyebrow { color: #ffe7df; }
-#week-1 .recipe-head h3 { font-size: clamp(1rem, 1.5vw, 1.35rem); line-height: 1.08; text-wrap: balance; }
-#week-1 .recipe-head::after {
+.week .recipe-head .eyebrow { color: #ffe7df; }
+.week .recipe-head h3 { font-size: clamp(1rem, 1.5vw, 1.35rem); line-height: 1.08; text-wrap: balance; }
+.week .recipe-head::after {
   content: "открыть рецепт"; margin-top: 0.1rem; padding: 0.32rem 0.58rem;
   border: 1px solid rgba(255, 255, 255, 0.55); border-radius: var(--radius-pill);
   background: rgba(55, 20, 20, 0.27); font-size: 0.62rem; font-weight: 700;
   opacity: 0; transform: translateY(0.25rem); transition: opacity 180ms ease, transform 180ms ease;
 }
-#week-1 .recipe:hover .recipe-head::after, #week-1 .recipe:focus-visible .recipe-head::after {
+.week .recipe:hover .recipe-head::after, .week .recipe:focus-visible .recipe-head::after {
   opacity: 1; transform: translateY(0);
 }
-#week-1 .recipe-body { display: none; }
+.week .recipe-body { display: none; }
 
 .mosaic-recipe-modal {
   position: fixed; z-index: 80; inset: 0; display: grid; place-items: center; padding: 1.2rem;
@@ -470,25 +470,25 @@ a { color: inherit; }
 .mosaic-recipe-modal .recipe-body .note, .mosaic-recipe-modal .recipe-body .swap-popover { grid-column: 1 / -1; }
 .mosaic-recipe-modal .swap-popover { margin-top: 0.1rem; }
 @media (max-width: 980px) {
-  #week-1 .recipes-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  #week-1 .recipe-head { padding: 0.7rem; }
-  #week-1 .recipe-head h3 { font-size: clamp(0.72rem, 1.8vw, 0.95rem); }
+  .week .recipes-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .week .recipe-head { padding: 0.7rem; }
+  .week .recipe-head h3 { font-size: clamp(0.72rem, 1.8vw, 0.95rem); }
 }
 @media (max-width: 560px) {
-  #week-1 .recipes-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.45rem; }
-  #week-1 .recipe {
+  .week .recipes-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.45rem; }
+  .week .recipe {
     aspect-ratio: auto;
     display: block;
     background: #fff;
     border-radius: 8px;
   }
-  #week-1 .recipe-hero {
+  .week .recipe-hero {
     position: static;
     display: flex;
     flex-direction: column;
     min-height: 0;
   }
-  #week-1 .recipe-photo {
+  .week .recipe-photo {
     position: relative;
     inset: auto;
     width: 100%;
@@ -496,8 +496,8 @@ a { color: inherit; }
     aspect-ratio: 1 / 1;
     flex: none;
   }
-  #week-1 .recipe-photo::after { display: none; }
-  #week-1 .recipe-head {
+  .week .recipe-photo::after { display: none; }
+  .week .recipe-head {
     position: static;
     inset: auto;
     display: flex;
@@ -511,8 +511,8 @@ a { color: inherit; }
     color: var(--ink);
     pointer-events: none;
   }
-  #week-1 .recipe-head .eyebrow { color: var(--terra-deep); font-size: 0.48rem; }
-  #week-1 .recipe-head h3 {
+  .week .recipe-head .eyebrow { color: var(--terra-deep); font-size: 0.48rem; }
+  .week .recipe-head h3 {
     color: var(--ink);
     font-size: clamp(0.62rem, 2.9vw, 0.78rem);
     line-height: 1.12;
@@ -521,9 +521,9 @@ a { color: inherit; }
     -webkit-line-clamp: 3;
     overflow: hidden;
   }
-  #week-1 .recipe-head::after { display: none; }
-  #week-1 .pills { gap: 0.12rem; }
-  #week-1 .pill {
+  .week .recipe-head::after { display: none; }
+  .week .pills { gap: 0.12rem; }
+  .week .pill {
     padding: 0.12rem 0.28rem;
     border-color: var(--terra-deep);
     color: var(--terra-deep);
@@ -533,9 +533,9 @@ a { color: inherit; }
   .mosaic-recipe-modal .recipe-body { grid-template-columns: 1fr; }
 }
 @media (max-width: 400px) {
-  #week-1 .recipes-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.35rem; }
-  #week-1 .recipe-head { min-height: 3.9rem; padding: 0.4rem 0.38rem 0.48rem; }
-  #week-1 .recipe-head h3 { font-size: 0.62rem; }
+  .week .recipes-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.35rem; }
+  .week .recipe-head { min-height: 3.9rem; padding: 0.4rem 0.38rem 0.48rem; }
+  .week .recipe-head h3 { font-size: 0.62rem; }
 }
 
 </style>
@@ -1023,7 +1023,7 @@ a { color: inherit; }
       </div>
     </article>
     
-    <article class="recipe" id="d5-lunch" data-name="говядина с томатами и картофелем, салат из огурца">
+    <article class="recipe leftover" id="d5-lunch" data-name="говядина с томатами и картофелем, салат из огурца">
       <div class="recipe-hero">
         <figure class="recipe-photo">
           <div class="badge-arc"><span>#sekta</span></div>
@@ -1032,7 +1032,7 @@ a { color: inherit; }
         <div class="recipe-head">
           <p class="eyebrow">обед</p>
           <h3>говядина с томатами и картофелем, салат из огурца</h3>
-          <div class="pills"><span class="pill">10 минут</span></div>
+          <div class="pills"><span class="pill">10 минут</span><span class="pill leftover">из заготовки</span></div>
         </div>
       </div>
       <div class="recipe-body">
@@ -4114,9 +4114,9 @@ const updateTopButton = () => topButton.classList.toggle('is-visible', window.sc
 window.addEventListener('scroll', updateTopButton, { passive: true });
 updateTopButton();
 
-const installWeekOneMosaic = () => {
-  const week = document.querySelector('#week-1');
-  if (!week || document.querySelector('.mosaic-recipe-modal')) return;
+const installMosaicForWeeks = () => {
+  const weeks = [...document.querySelectorAll('.week')];
+  if (!weeks.length || document.querySelector('.mosaic-recipe-modal')) return;
   const modal = document.createElement('div');
   modal.className = 'mosaic-recipe-modal';
   modal.setAttribute('aria-hidden', 'true');
@@ -4163,7 +4163,7 @@ const installWeekOneMosaic = () => {
     document.body.style.overflow = 'hidden';
     closeButton.focus();
   };
-  week.querySelectorAll('.day .recipe').forEach(recipe => {
+  weeks.forEach(week => week.querySelectorAll('.day .recipe').forEach(recipe => {
     const title = recipe.querySelector('.recipe-head h3')?.textContent.trim() || 'Открыть рецепт';
     recipe.setAttribute('tabindex', '0');
     recipe.setAttribute('role', 'button');
@@ -4178,14 +4178,14 @@ const installWeekOneMosaic = () => {
         open(recipe);
       }
     });
-  });
+  }));
   closeButton.addEventListener('click', close);
   modal.addEventListener('click', event => { if (event.target === modal) close(); });
   document.addEventListener('keydown', event => {
     if (event.key === 'Escape' && modal.classList.contains('is-open')) close();
   });
 };
-installWeekOneMosaic();
+installMosaicForWeeks();
 </script>
 </body>
 </html>
