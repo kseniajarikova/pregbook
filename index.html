@@ -4165,13 +4165,10 @@ const installMosaicForWeeks = () => {
     if (!head || !body) return;
     content.replaceChildren(head, body);
     const title = head.querySelector('h3')?.textContent.trim() || 'Рецепт';
-    const titleNode = document.createElement('h2');
-    titleNode.id = 'mosaic-modal-title';
-    titleNode.textContent = title;
-    titleNode.className = 'sr-only';
-    head.setAttribute('aria-hidden', 'true');
+    const titleElement = head.querySelector('h3');
+    if (titleElement) titleElement.id = 'mosaic-modal-title';
+    dialog.setAttribute('aria-labelledby', 'mosaic-modal-title');
     dialog.setAttribute('aria-label', title);
-    content.prepend(titleNode);
     wireModalSwaps();
     returnFocus = document.activeElement;
     modal.classList.add('is-open');
