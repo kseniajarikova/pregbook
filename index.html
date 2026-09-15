@@ -3970,7 +3970,6 @@ document.querySelectorAll('.shop input[type="checkbox"]').forEach(cb => {
   cb.checked = localStorage.getItem(cb.id) === '1';
   cb.addEventListener('change', () => localStorage.setItem(cb.id, cb.checked ? '1' : '0'));
 });
-});
 const makeSubstitutionPopovers = () => {
   document.querySelectorAll('.swap-note, .substitution-note').forEach(note => {
     const recipeBody = note.closest('.recipe')?.querySelector('.recipe-body');
